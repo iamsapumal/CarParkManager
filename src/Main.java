@@ -1,3 +1,9 @@
+import Controllers.ObjectCreator;
+import Controllers.PettahMultiStoryCarParkManager;
+import Models.Vehicles.Vehicle;
+import Models.Vehicles.VehicleType;
+import Util.DateTime;
+
 import java.util.Scanner;
 
 class Main {
@@ -7,8 +13,8 @@ class Main {
     public static void main(String[] args) {
         while(true) {
             System.out.println("Select your Choice : ");
-            System.out.println("1. Add Vehicle : ");
-            System.out.println("2. Delete Vehicle : ");
+            System.out.println("1. Add Models.Resources.Vehicles.Vehicle : ");
+            System.out.println("2. Delete Models.Resources.Vehicles.Vehicle : ");
             System.out.println("3. Print the current available vehicle : ");
             System.out.println("4. Print statistics : ");
             System.out.println("5. Vehicles parked in a day : ");
@@ -102,9 +108,9 @@ class Main {
         //getting choice from the user
         System.out.println("Select your choice : ");
         System.out.println("******************");
-        System.out.println("1. To add a Car.");
+        System.out.println("1. To add a Models.Resources.Vehicles.Car.");
         System.out.println("2. To add a Motor Bike.");
-        System.out.println("3. To add a Van.");
+        System.out.println("3. To add a Models.Resources.Vehicles.Van.");
         System.out.println(">>>>");
 
         Scanner sc = new Scanner(System.in);

@@ -1,3 +1,7 @@
+package Controllers;
+
+import Models.Vehicles.*;
+import Util.DateTime;
 
 import java.awt.Color;
 import java.util.Scanner;
@@ -15,8 +19,9 @@ public class ObjectCreator {
 		System.out.println("Enter the model :");
 		String model=sc.next();
 		
-		System.out.println("Enter the date and time (DD/MM/YYYY-HH:mm:ss)");
-		String dateTime=sc.next();
+		//System.out.println("Enter the date and time (DD/MM/YYYY-HH:mm:ss)");
+		//String dateTime=sc.next();
+		String dateTime = "22/12/2021-12:12:12";
 		//adding the data in to a string array
 		String[] arr= dateTime.split("-");
 		String[] dateString= arr[0].split("/");
@@ -31,18 +36,18 @@ public class ObjectCreator {
 		
 		switch(type) {
 		case Car:
-			System.out.println("Enter number of Doors : ");
-			int numDoors=sc.nextInt();
+//			System.out.println("Enter number of Doors : ");
+//			int numDoors=sc.nextInt();
+//
+//			System.out.println("Enter the color of the Models.Resources.Vehicles.Car (R/G/B) : ");
+//			String colorString=sc.next();
+//			String[] colorArr =colorString.split("/");
+//			Color carColor=new Color(Integer.parseInt(colorArr[0]),
+//					Integer.parseInt(colorArr[1]),Integer.parseInt(colorArr[2]));
 			
-			System.out.println("Enter the color of the Car (R/G/B) : ");
-			String colorString=sc.next();
-			String[] colorArr =colorString.split("/");
-			Color carColor=new Color(Integer.parseInt(colorArr[0]),
-					Integer.parseInt(colorArr[1]),Integer.parseInt(colorArr[2]));
-			
-			obj=new Car(plateID,brand,model,entryTime,numDoors,carColor);
+			obj=new Car(plateID,brand,model,entryTime);
 			break;
-			
+		//22/12/2021-12:12:12
 		case Van:
 			System.out.println("Enter the Cargo Capacity : ");
 			double cargoCapacity=sc.nextDouble();

@@ -1,18 +1,20 @@
+package Models.Vehicles;
 
+import Util.DateTime;
 
 import java.awt.Color;
 
 public class Car extends Vehicle { 
 	
-	//Car Properties
+	//Models.Resources.Vehicles.Car Properties
 	private int doors;
 	private Color color;
 	
 	//Constructor
-	public Car(String noPlate, String brand, String model, DateTime entryTime, int doors, Color color) {
+	public Car(String noPlate, String brand, String model, DateTime entryTime) {
 		super(noPlate, brand, model, entryTime);
-		this.doors=doors;
-		this.color=color;
+//		this.doors=doors;
+//		this.color=color;
 	}
 	
 	public int getDoors() {

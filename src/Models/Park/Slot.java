@@ -1,3 +1,5 @@
+package Models.Park;
+
 import java.util.List;
 
 public class Slot {

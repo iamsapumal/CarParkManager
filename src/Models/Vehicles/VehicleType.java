@@ -1,4 +1,4 @@
-
+package Models.Vehicles;
 
 public enum VehicleType {
 	

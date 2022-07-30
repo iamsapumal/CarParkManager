@@ -1,9 +1,13 @@
-public class Bus extends Vehicle {
+package Models.Vehicles;
+
+import Util.DateTime;
+
+public class MiniBus extends Vehicle {
 	//Properties
 	private int seatCount;
 	
 	//Constructor
-	public Bus(String noPlate, String brand, String model, DateTime entryTime, int seatCount) {
+	public MiniBus(String noPlate, String brand, String model, DateTime entryTime, int seatCount) {
 		super(noPlate, brand, model, entryTime);
 		this.seatCount=seatCount;
 	}

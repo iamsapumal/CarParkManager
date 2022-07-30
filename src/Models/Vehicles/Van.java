@@ -1,4 +1,6 @@
-
+package Models.Vehicles;
+import Models.Resources.Lift;
+import Util.DateTime;
 
 public class Van extends Vehicle {
 	//Properties

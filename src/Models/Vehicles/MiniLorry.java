@@ -1,10 +1,14 @@
+package Models.Vehicles;
+
+import Util.DateTime;
+
 public class MiniLorry extends Vehicle {
 	//Properties
 	private double cargoVolume;
     private double length;
 	
 	//Constructor
-	public MiniLorry(String noPlate, String brand, String model, DateTime entryTime, double cargoVolume,double length) {
+	public MiniLorry(String noPlate, String brand, String model, DateTime entryTime, double cargoVolume, double length) {
 		super(noPlate, brand, model, entryTime);
 		this.cargoVolume=cargoVolume;
         this.length=length;

@@ -1,4 +1,5 @@
-
+package Models.Vehicles;
+import Util.DateTime;
 
 public abstract class Vehicle extends Object implements Comparable<Vehicle> {
 	
@@ -7,11 +8,11 @@ public abstract class Vehicle extends Object implements Comparable<Vehicle> {
 		return this.entryTime.compareTo(o.entryTime);
 	}
 	
-	//Vehicle Properties
+	//Models.Resources.Vehicles.Vehicle Properties
 	private String noPlate;
 	private String brand;
 	private String model;
-	private DateTime entryTime;
+	public DateTime entryTime;
 	
 	//Constructor
 	public Vehicle(String noPlate, String brand, String model, DateTime entryTime ){

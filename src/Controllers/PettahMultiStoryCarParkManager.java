@@ -1,7 +1,7 @@
 package Controllers;
 
 import Models.Park.Floor;
-import Models.Park.Slot;
+import Models.Park.FloorNumber;
 import Models.Vehicles.*;
 import Util.DateTime;
 
@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PettahMultiStoryCarParkManager implements CarParkManager {
-    public ArrayList<Vehicle> listOfVehicles = new ArrayList<Vehicle>();
+    public static  List<Vehicle> listOfVehicles = Collections.synchronizedList(new ArrayList<>());
     private static PettahMultiStoryCarParkManager instance = null;
     private int availableSlots = 20;
     private double chargePerHour = 50;
@@ -28,9 +28,9 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
 
     private FloorManager[] floorManagers = new FloorManager[floorCount];
 
-        private PettahMultiStoryCarParkManager() {
-            this.pettahMultiStoryCarPark = createCarParkVirtualModel();
-            createFloorManagers();
+    private PettahMultiStoryCarParkManager() {
+        this.pettahMultiStoryCarPark = createCarParkVirtualModel();
+        createFloorManagers();
     }
 
     public static List<Floor> createCarParkVirtualModel() {
@@ -41,9 +41,9 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                 VehicleType.Van
         ));
         List<VehicleType> groundFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
-              VehicleType.Van
+                VehicleType.Van
         ));
-        Floor groundFloor = new Floor(groundFloorPrioritisedVehicles,groundFloorAccessibleVehicles, 60);
+        Floor groundFloor = new Floor(0, groundFloorPrioritisedVehicles,groundFloorAccessibleVehicles, 60);
 
 
         List<VehicleType> firstFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
@@ -52,7 +52,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> firstFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
-        Floor firstFloor = new Floor(firstFloorPrioritisedVehicles,firstFloorAccessibleVehicles, 60);
+        Floor firstFloor = new Floor(1, firstFloorPrioritisedVehicles,firstFloorAccessibleVehicles, 60);
 
 
 
@@ -63,7 +63,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> secondFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
-        Floor secondFloor = new Floor(secondFloorPrioritisedVehicles,secondFloorAccessibleVehicles, 60);
+        Floor secondFloor = new Floor(2, secondFloorPrioritisedVehicles,secondFloorAccessibleVehicles, 60);
 
 
 
@@ -74,7 +74,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> thirdFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
-        Floor thirdFloor = new Floor(groundFloorPrioritisedVehicles,groundFloorAccessibleVehicles, 60);
+        Floor thirdFloor = new Floor(3, groundFloorPrioritisedVehicles,groundFloorAccessibleVehicles, 60);
 
 
         List<VehicleType> fourthFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
@@ -83,25 +83,25 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> fourthFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
-        Floor fourthFloor = new Floor(fourthFloorPrioritisedVehicles,fourthFloorAccessibleVehicles, 60);
+        Floor fourthFloor = new Floor(4, fourthFloorPrioritisedVehicles,fourthFloorAccessibleVehicles, 60);
 
 
         List<VehicleType> fifthFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
         List<VehicleType> fifthFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
-                VehicleType.Car, VehicleType.Van
+                VehicleType.Car
         ));
-        Floor fifthFloor = new Floor(fifthFloorPrioritisedVehicles,fifthFloorAccessibleVehicles, 60);
+        Floor fifthFloor = new Floor(5, fifthFloorPrioritisedVehicles,fifthFloorAccessibleVehicles, 60);
 
 
         List<VehicleType> sixthFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
-                VehicleType.Car, VehicleType.Van
+                VehicleType.Car
         ));
         List<VehicleType> sixthFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
-                VehicleType.Car, VehicleType.Van
+                VehicleType.Car
         ));
-        Floor sixthFloor = new Floor(sixthFloorPrioritisedVehicles,sixthFloorAccessibleVehicles, 60);
+        Floor sixthFloor = new Floor(6, sixthFloorPrioritisedVehicles,sixthFloorAccessibleVehicles, 60);
 
 
 
@@ -111,7 +111,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> upperThreeAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car
         ));
-        Floor upperThreeFloors = new Floor(upperThreeAccessibleVehicles,upperThreeFloorsPrioritisedVehicles, 180);
+        Floor upperThreeFloors = new Floor(7, upperThreeAccessibleVehicles,upperThreeFloorsPrioritisedVehicles, 180);
 
 
         pettahMultiStoryCarPark.add(groundFloor);
@@ -149,34 +149,139 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
     @Override
     public void addVehicle(Vehicle vehicle) {
         //check whether the vehicle is already parked or not
-        for(Vehicle item : listOfVehicles) {
-            if(item.equals(vehicle)) {
-                System.out.println("This vehicle is already parked.");
-                return;
+        int groundFloor = 0;
+        ThreadGroup threadGroup = new ThreadGroup(vehicle.getNoPlate());
+        Runnable assignVehicle = new Runnable() {
+            boolean isVehicleParked = false;
+            @Override
+            public void run() {
+                try {
+                        for (Vehicle item : listOfVehicles) {
+                            if (item.getNoPlate().equals(vehicle.getNoPlate())) {
+                                System.out.println("Vehicle number" + vehicle.getNoPlate() +" is parked at the car park.");
+                                isVehicleParked = true;
+                                break;
+                            }
+                        }
+                        if(isVehicleParked || Thread.currentThread().isInterrupted()) {
+
+                        };
+
+                        if (vehicle instanceof Car) {
+//                            if (pettahMultiStoryCarPark.get(FloorNumber.UPPER_FLOORS.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.UPPER_FLOORS.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.SIXTH_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.SIXTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.FIFTH_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FIFTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.FOURTH_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FOURTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.THIRD_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.THIRD_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.SECOND_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.SECOND_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.FIRST_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FIRST_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()));
+//                            } else {
+//                                System.out.println("Sorry. Pettah car park has no enough space to park this vehicle.");
+////                            }
+                            tryAndAddVehicleToFloor(vehicle, FloorNumber.UPPER_FLOORS.getValue());
+                        } else if (vehicle instanceof Van) {
+//                            if (pettahMultiStoryCarPark.get(FloorNumber.FIRST_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FIRST_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.SECOND_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.SECOND_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.THIRD_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.THIRD_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.FOURTH_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FOURTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.FIFTH_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FIFTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.SIXTH_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.SIXTH_FLOOR.getValue()));
+//                            } else {
+//                                System.out.println("Sorry. Pettah car park has no enough space to park this vehicle.");
+//                                Thread.currentThread().interrupt();
+//                            }
+                            tryAndAddVehicleToFloor(vehicle, FloorNumber.SIXTH_FLOOR.getValue());
+                        } else if (vehicle instanceof MiniBus) {
+//                            if (pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()));
+//                            } else {
+//                                System.out.println("Sorry. Pettah car park has no enough space to park this vehicle.");
+//                                Thread.currentThread().interrupt();
+//                            }
+                            tryAndAddVehicleToFloor(vehicle, FloorNumber.GROUND_FLOOR.getValue());
+                        } else if (vehicle instanceof MiniLorry) {
+//                            if (pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()));
+//                            } else {
+//                                System.out.println("Sorry. Pettah car park has no enough space to park this vehicle.");
+//                                Thread.currentThread().interrupt();
+//                            }
+                            tryAndAddVehicleToFloor(vehicle, FloorNumber.GROUND_FLOOR.getValue());
+                        } else if (vehicle instanceof Bus) {
+//                            if (pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()));
+//                            } else {
+//                                System.out.println("Sorry. Pettah car park has no enough space to park this vehicle.");
+//                                Thread.currentThread().interrupt();
+//                            }
+                            tryAndAddVehicleToFloor(vehicle, FloorNumber.GROUND_FLOOR.getValue());
+                        } else if (vehicle instanceof Lorry) {
+//                            if (pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()).findSpaceForVehicleByType(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()));
+//                            } else {
+//                                System.out.println("Sorry. Pettah car park has no enough space to park this vehicle.");
+//                                Thread.currentThread().interrupt();
+//                            }
+                            tryAndAddVehicleToFloor(vehicle, FloorNumber.GROUND_FLOOR.getValue());
+                        } else if (vehicle instanceof MotorBike) {
+//                            if (pettahMultiStoryCarPark.get(FloorNumber.SIXTH_FLOOR.getValue()).isBikeSpacesAvailable(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.SIXTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.SIXTH_FLOOR.getValue()).isBikeSpacesAvailable(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.SIXTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.FIFTH_FLOOR.getValue()).isBikeSpacesAvailable(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FIFTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.FOURTH_FLOOR.getValue()).isBikeSpacesAvailable(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FOURTH_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.THIRD_FLOOR.getValue()).isBikeSpacesAvailable(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.THIRD_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.SECOND_FLOOR.getValue()).isBikeSpacesAvailable(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.SECOND_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.FIRST_FLOOR.getValue()).isBikeSpacesAvailable(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.FIRST_FLOOR.getValue()));
+//                            } else if (pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()).isBikeSpacesAvailable(vehicle)) {
+//                                setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(FloorNumber.GROUND_FLOOR.getValue()));
+//                            } else {
+//                                System.out.println("Sorry. Pettah car park has no enough space to park this vehicle.");
+//                                Thread.currentThread().interrupt();
+//                            }
+                            tryAndAddVehicleToFloor(vehicle, FloorNumber.FIRST_FLOOR.getValue());
+                        }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+
+                }
             }
-        }
-        findAvailableFloorandAddVehicle(vehicle);
-//        // Check whether there are sufficient space available for any vehicle to park
-//        if(listOfVehicles.size()<20) {
-//            if(obj instanceof Van ) {
-//                if(listOfVehicle.size()<19) {
-//                    listOfVehicle.add(obj);
-//                    availableSlots -=2;
-//                    System.out.println("Available slots : "+availableSlots);
-//                    System.out.println("\n");
-//                } else {
-//                    System.out.println("Sorry..There are no slots available to park your Models.Resources.Vehicles.Van."+"\n");
-//                }
-//            }
-//            if(obj instanceof MotorBike || obj instanceof Car) {
-//                listOfVehicles.add(obj);
-//                availableSlots --;
-//                System.out.println("Available slots : "+availableSlots);
-//            }
-//        }else {
-//            System.out.println("Sorry...There are not space availble for parking...");
-//        }
+        };
+
+        Thread addVehicleToFloor = new Thread(threadGroup, assignVehicle, vehicle.getNoPlate());
+        addVehicleToFloor.start();
     }
+
+    public void tryAndAddVehicleToFloor(Vehicle vehicle, int floorNumber) {
+        int nextFloorNum = setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(floorNumber));
+        if (nextFloorNum > 0) {
+            tryAndAddVehicleToFloor(vehicle, nextFloorNum);
+        } else if (nextFloorNum == -1) {
+            System.out.println(vehicle.getNoPlate()+ " Parked at " + vehicle.getParkedFloorNumber() + " floor, slot number " + vehicle.getParkedSlotNumber());
+        }
+    }
+
 
     @Override
     public void deleteVehicle(String IdPlate) {
@@ -200,95 +305,54 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
     }
 
 
-    private synchronized void findAvailableFloorandAddVehicle(Vehicle vehicle) {
-        ThreadGroup threadGroup = new ThreadGroup(vehicle.getNoPlate());
-        for (int i = 0; i < floorManagers.length; i++) {
-            if(floorManagers[i].findAvailabilityByVehicle(vehicle)) {
-                Floor floor = floorManagers[i].getFloor();
-                Runnable assignVehicle = new Runnable() {
-                    @Override
-                    public void run() {
-                        try{ if (!Thread.currentThread().isInterrupted()) {
-                            if(vehicle instanceof Car) {
-                                for (int i = 0; i < floor.getSlotList().length; i++) {
-                                    if(!floor.getSlotList()[i].isOccupied() && !Thread.currentThread().isInterrupted() && !listOfVehicles.contains(vehicle)) {
-                                        for(Vehicle item : listOfVehicles) {
-                                            if(item.equals(vehicle)) {
-                                                System.out.println("This vehicle is already parked.");
-                                                return;
-                                            }
-                                        }
-                                        String[] numPlates = {vehicle.getNoPlate()};
-                                        floor.getSlotList()[i].setVehiclePlateNo(numPlates);
-                                        floor.getSlotList()[i].setOccupied(true);
-                                        floor.getSlotList()[i].setParkedVehicleType(VehicleType.Car.name());
-                                        listOfVehicles.add(vehicle);
-                                        System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
-                                        slotAllocationFinished(threadGroup);
-                                        break;
-                                        // notifyAll();
-                                    }
-                                }
-                            } else if (vehicle instanceof Van){
-                                for (int i = 0; i < floor.getSlotList().length; i++) {
-                                    if(!floor.getSlotList()[i].isOccupied()) {
-                                        String[] numPlates = {vehicle.getNoPlate()};
-                                        floor.getSlotList()[i].setVehiclePlateNo(numPlates);
-                                        floor.getSlotList()[i].setParkedVehicleType(VehicleType.Van.name());
-                                        // notifyAll();
-                                    }
-                                }
-                            }else if (vehicle instanceof MotorBike){
-                                boolean isBikeSlotFound = false;
-                                for (int i = 0; i < floor.getSlotList().length; i++) {
-                                    if (floor.getSlotList()[i].getParkedVehicleType().equals(VehicleType.MotorBike.name())){
-                                        if (floor.getSlotList()[i].getAvailableBikeSpaces()!=0){
-                                            String[] numPlates = floor.getSlotList()[i].getVehiclePlateNo();
-                                            for (int j = 0; j < numPlates.length; j++) {
-                                                if (numPlates[i].equals("")){
-                                                    numPlates[i] = vehicle.getNoPlate();
-                                                }
-                                            }
-                                            floor.getSlotList()[i].setVehiclePlateNo(numPlates);
-                                            floor.getSlotList()[i].setOccupied(true);
-                                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex());
-                                            slotAllocationFinished(threadGroup);
-                                            isBikeSlotFound =true;
-                                            floor.getSlotList()[i].setAvailableBikeSpaces(floor.getSlotList()[i].getAvailableBikeSpaces()-1);
-                                            //  notifyAll();
-                                        }
-                                    }
-                                }
-                                if (!isBikeSlotFound) {
-                                    for (int i = 0; i < floor.getSlotList().length; i++) {
-                                        if(!floor.getSlotList()[i].isOccupied()) {
-                                            String[] numPlates = {vehicle.getNoPlate()};
-                                            floor.getSlotList()[i].setVehiclePlateNo(numPlates);
-                                            floor.getSlotList()[i].setOccupied(true);
-                                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex());
-                                            slotAllocationFinished(threadGroup);
-                                            floor.getSlotList()[i].setParkedVehicleType(VehicleType.MotorBike.name());
-                                            floor.getSlotList()[i].setAvailableBikeSpaces(floor.getSlotList()[i].getAvailableBikeSpaces()-1);
-                                            isBikeSlotFound =true;
-                                            //  notifyAll();
-                                        }
-                                    }
-                                }
+    private synchronized int setThreadPriorityAndTryToAddVehicle(Vehicle vehicle, Floor floor) {
 
-                            }
-                            Thread.sleep(1000);
-                        }
-
-                        } catch (InterruptedException ie) {
-                            System.out.println("");
-                        } finally {
-
-                        }
-                    }
-                };
-                floorManagers[i].addVehicle(threadGroup, vehicle, assignVehicle);
+        if(vehicle instanceof Car) {
+            if(floor.accessibleVehicles.contains(VehicleType.Car) && floor.prioritizedVehicles.contains(VehicleType.Car)){
+                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            } else {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+            }
+        } else if (vehicle instanceof Van) {
+            if( floor.accessibleVehicles.contains(VehicleType.Van) && floor.prioritizedVehicles.contains(VehicleType.Van)){
+                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            } else {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+            }
+        } else if (vehicle instanceof Bus) {
+            if(floor.accessibleVehicles.contains(VehicleType.Bus) && floor.prioritizedVehicles.contains(VehicleType.Bus)) {
+                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            } else {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+            }
+        } else if (vehicle instanceof Lorry) {
+            if(floor.accessibleVehicles.contains(VehicleType.Lorry) && floor.prioritizedVehicles.contains(VehicleType.Lorry)) {
+                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            } else {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+            }
+        } else if (vehicle instanceof MiniBus) {
+            if(floor.accessibleVehicles.contains(VehicleType.MiniBus) && floor.prioritizedVehicles.contains(VehicleType.MiniBus)) {
+                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            } else {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+            }
+        } else if (vehicle instanceof MiniLorry) {
+            if(floor.accessibleVehicles.contains(VehicleType.MiniLorry) && floor.prioritizedVehicles.contains(VehicleType.MiniLorry)) {
+                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            } else {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
+            }
+        } else if (vehicle instanceof MotorBike) {
+            if(floor.accessibleVehicles.contains(VehicleType.MotorBike) && floor.prioritizedVehicles.contains(VehicleType.MotorBike)) {
+                Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+            } else {
+                Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
             }
         }
+        return floorManagers[floor.getFloorNo()].addVehicle(vehicle);
+//            }
+//        }
     }
 
     private synchronized void slotAllocationFinished(ThreadGroup group) {

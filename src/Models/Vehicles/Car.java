@@ -58,8 +58,19 @@ public class Car extends Vehicle {
 			return false;
 		return true;
 	}
-	
-	
+
+
+	@Override
+	public String toString() {
+		return "Car{" +
+				"noPlate='" + getNoPlate() + '\'' +
+				", brand='" + getBrand() + '\'' +
+				", model='" + getModel() + '\'' +
+				", entryTime=" + getEntryDate() +
+				"doors=" + doors +
+				", color=" + color +
+				'}';
+	}
 
 	
 }

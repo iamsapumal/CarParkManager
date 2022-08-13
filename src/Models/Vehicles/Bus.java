@@ -7,7 +7,7 @@ public class Bus extends Vehicle {
 	private int seatCount;
 	
 	//Constructor
-	public Bus(String noPlate, String brand, String model, DateTime entryTime, int seatCount) {
+	public Bus(String noPlate, String brand, String model, DateTime entryTime) {
 		super(noPlate, brand, model, entryTime);
 		this.seatCount=seatCount;
 	}

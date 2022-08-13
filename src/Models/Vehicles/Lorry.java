@@ -8,7 +8,7 @@ public class Lorry extends Vehicle {
     private double length;
 	
 	//Constructor
-	public Lorry(String noPlate, String brand, String model, DateTime entryTime, double cargoVolume, double length) {
+	public Lorry(String noPlate, String brand, String model, DateTime entryTime) {
 		super(noPlate, brand, model, entryTime);
 		this.cargoVolume=cargoVolume;
         this.length=length;

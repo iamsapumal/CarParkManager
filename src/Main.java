@@ -108,15 +108,20 @@ class Main {
         //getting choice from the user
         System.out.println("Select your choice : ");
         System.out.println("******************");
-        System.out.println("1. To add a Models.Resources.Vehicles.Car.");
+        System.out.println("1. To add a Car.");
         System.out.println("2. To add a Motor Bike.");
-        System.out.println("3. To add a Models.Resources.Vehicles.Van.");
+        System.out.println("3. To add a Van.");
+        System.out.println("4. To add a Bus.");
+        System.out.println("5. To add a Lorry.");
+        System.out.println("6. To add a MiniBus.");
+        System.out.println("7. To add a MiniLorry.");
         System.out.println(">>>>");
 
         Scanner sc = new Scanner(System.in);
         int choice = sc.nextInt();
-        VehicleType type = (choice == 1)?VehicleType.Car:(choice == 2)? VehicleType.MotorBike:(choice == 3)? VehicleType.Van:null;
+        VehicleType type = (choice == 1)?VehicleType.Car:(choice == 2)? VehicleType.MotorBike:(choice == 3)? VehicleType.Van:(choice == 4)? VehicleType.Bus:(choice == 5)? VehicleType.Lorry:(choice == 6)? VehicleType.MiniBus:(choice == 7)? VehicleType.MiniLorry: null;
         ObjectCreator creater = new ObjectCreator();
+        assert type != null;
         Vehicle vehicle = creater.createVehicle(type);
         pettahCarParkManager.addVehicle(vehicle);
     }

@@ -13,6 +13,8 @@ public abstract class Vehicle extends Object implements Comparable<Vehicle> {
 	private String brand;
 	private String model;
 	public DateTime entryTime;
+	private int parkedSlotNumber;
+	private int parkedFloorNumber;
 	
 	//Constructor
 	public Vehicle(String noPlate, String brand, String model, DateTime entryTime ){
@@ -49,8 +51,31 @@ public abstract class Vehicle extends Object implements Comparable<Vehicle> {
 	public void setEntryDate(DateTime entryTime) {
 		this.entryTime = entryTime;
 	}
-	
-	
-	
 
+	@Override
+	public String toString() {
+		return "Vehicle{" +
+				"noPlate='" + noPlate + '\'' +
+				", brand='" + brand + '\'' +
+				", model='" + model + '\'' +
+				", entryTime=" + entryTime +
+				'}';
+	}
+
+
+	public int getParkedSlotNumber() {
+		return parkedSlotNumber;
+	}
+
+	public void setParkedSlotNumber(int parkedSlotNumber) {
+		this.parkedSlotNumber = parkedSlotNumber;
+	}
+
+	public int getParkedFloorNumber() {
+		return parkedFloorNumber;
+	}
+
+	public void setParkedFloorNumber(int parkedFloorNumber) {
+		this.parkedFloorNumber = parkedFloorNumber;
+	}
 }

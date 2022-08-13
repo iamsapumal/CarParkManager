@@ -9,9 +9,9 @@ public class Slot {
 
     private String parkedVehicleType;
 
-    private String[] vehiclePlateNo;
+    private String vehiclePlateNo;
 
-    private int availableBikeSpaces;
+    private List<String> bikeSpaceArray;
 
 
     public int getIndex() {
@@ -46,20 +46,20 @@ public class Slot {
         this.parkedVehicleType = parkedVehicleType;
     }
 
-    public String[] getVehiclePlateNo() {
+    public String getVehiclePlateNo() {
         return vehiclePlateNo;
     }
 
-    public void setVehiclePlateNo(String[] vehiclePlateNo) {
+    public void setVehiclePlateNo(String vehiclePlateNo) {
         this.vehiclePlateNo = vehiclePlateNo;
     }
 
 
-    public int getAvailableBikeSpaces() {
-        return availableBikeSpaces;
+    public List<String> getBikeSpaceArray() {
+        return bikeSpaceArray;
     }
 
-    public void setAvailableBikeSpaces(int availableBikeSpaces) {
-        this.availableBikeSpaces = availableBikeSpaces;
+    public void setBikeSpaceArray(List<String> bikeSpaceArray) {
+        this.bikeSpaceArray = bikeSpaceArray;
     }
 }

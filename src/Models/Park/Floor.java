@@ -3,11 +3,9 @@ package Models.Park;
 import Models.Resources.EntranceDoor;
 import Models.Resources.ExitDoor;
 import Models.Resources.Lift;
-import Models.Vehicles.Car;
-import Models.Vehicles.Van;
-import Models.Vehicles.Vehicle;
-import Models.Vehicles.VehicleType;
+import Models.Vehicles.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Floor {
@@ -19,7 +17,8 @@ public class Floor {
     private ExitDoor[] availableExitDoors;
     private Lift[] availableLifts;
     private int bikeCountForSlot = 3;
-    public Floor(List<VehicleType> accessibleVehicles, List<VehicleType> prioritizedVehicles,int numberOfSlots) {
+    public Floor(int floorNo, List<VehicleType> accessibleVehicles, List<VehicleType> prioritizedVehicles,int numberOfSlots) {
+        this.floorNo = floorNo;
         this.accessibleVehicles = accessibleVehicles;
         this.prioritizedVehicles = prioritizedVehicles;
         this.slotList = new Slot[numberOfSlots];
@@ -28,7 +27,9 @@ public class Floor {
                 Slot s = new Slot();
                 s.setIndex(j);
                 s.setOccupied(false);
-                s.setAvailableBikeSpaces(bikeCountForSlot);
+               // s.setBikeSpaceArray(bikeCountForSlot);
+                ArrayList<String> bikesSpaceList = new ArrayList(3);
+                s.setBikeSpaceArray(bikesSpaceList);
                 if (j+1 < numberOfSlots){
                     s.setNextIndex(j+1);
                 }else {
@@ -52,10 +53,44 @@ public class Floor {
     }
 
 
-    public void findSpaceForVehicleByType(Vehicle vehicle) {
-        if (vehicle instanceof Car) {}
-        else if (vehicle instanceof Van) {}
+    public boolean findSpaceForVehicleByType(Vehicle vehicle) {
+        if (vehicle instanceof Car) {
+            for (int i = 0; i < slotList.length; i++) {
+                if(!slotList[i].isOccupied()) {
+                    return true;
+                }
+            }
+            return true;
+        } else if (vehicle instanceof Van) {
+            for (int i = 0; i < slotList.length; i++) {
+                if(!slotList[i].isOccupied() && !slotList[i+1].isOccupied()) {
+                    return true;
+                }
+            }
+        } else if (vehicle instanceof Bus) {
+            for (int i = 0; i < slotList.length; i++) {
+                if(!slotList[i].isOccupied() && !slotList[i+1].isOccupied() && !slotList[i+2].isOccupied() && !slotList[i+3].isOccupied() && !slotList[i+4].isOccupied()) {
+                    return true;
+                }
+            }
+        } else if (vehicle instanceof Lorry) {
+            for (int i = 0; i < slotList.length; i++) {
+                if(!slotList[i].isOccupied() && !slotList[i+1].isOccupied() && !slotList[i+2].isOccupied() && !slotList[i+3].isOccupied() && !slotList[i+4].isOccupied()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
+    public boolean isBikeSpacesAvailable(Vehicle vehicle) {
+        if (vehicle instanceof Car) {
+            return true;
+        }
+        else if (vehicle instanceof Van) {
+            return true;
+        }
+        return false;
     }
 
     public void setSlotList(Slot[] slotList) {

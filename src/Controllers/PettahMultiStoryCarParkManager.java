@@ -39,7 +39,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         createFloorManagers();
     }
 
-    public static List<Floor> createCarParkVirtualModel() {
+    public static void CreateLifts() {
         Lift  lift_1 = new Lift("LIFT_1", 1, false);
         Lift  lift_2 = new Lift("LIFT_2",2, false);
         Lift  lift_3 = new Lift( "LIFT_3",3, false);
@@ -49,8 +49,11 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         LIFTS.add(lift_2);
         LIFTS.add(lift_3);
         LIFTS.add(lift_4);
+    }
 
-        //   initLiftManager();
+    public static List<Floor> createCarParkVirtualModel() {
+
+        CreateLifts();
         List<Floor> pettahMultiStoryCarPark = Collections.synchronizedList(new ArrayList<>());
 
         List<VehicleType> groundFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(

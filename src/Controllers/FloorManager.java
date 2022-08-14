@@ -279,152 +279,82 @@ public class FloorManager {
 
 
 
-//    public  synchronized  int findSpaceAvailabilityByVehicle (Vehicle vehicle) {
-//        int operationResult = -4;
-//        boolean unableToFindaSlot = true;
-//        try{
-//            lock.lock();
-//            if (!Thread.currentThread().isInterrupted()) {
-//                if(vehicle instanceof Car) {
-//                    for (int i = 0; i < floor.getSlotList().length; i++) {
-//                        if(!floor.getSlotList()[i].isOccupied()) {
-//
-//                        }
-//                    }
-//                    if (unableToFindaSlot) {
-//                        if (floorLevel == 7) {
-//                            operationResult = 8;
-//                        }else if (floorLevel == 8) {
-//                            operationResult = 1;
-//                        } else if (floorLevel == 1) {
-//                            operationResult = 2;
-//                        } else if (floorLevel == 2) {
-//                            operationResult = 3;
-//                        } else if (floorLevel == 3) {
-//                            operationResult = 4;
-//                        } else if (floorLevel == 4) {
-//                            operationResult = 5;
-//                        } else if (floorLevel == 5) {
-//                            operationResult = 6;
-//                        } else {
-//                            operationResult = -2;
-//                        }
-//                    }
-//                } else if (vehicle instanceof Van){
-//                    for (int i = 0; i < floor.getSlotList().length; i++) {
-//                        if(i+1 < floor.getSlotList().length && !floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied()) {
-//
-//                            operationResult = -1;
-//                            unableToFindaSlot = false;
-//                            break;
-//                        } }
-//                    if (unableToFindaSlot) {
-//                        if (floorLevel == 1) {
-//                            operationResult = 2;
-//                        } else if (floorLevel == 2) {
-//                            operationResult = 3;
-//                        } else if (floorLevel == 3) {
-//                            operationResult = 4;
-//                        } else if (floorLevel == 4) {
-//                            operationResult = 5;
-//                        } else if (floorLevel == 5) {
-//                            operationResult = 6;
-//                        } else {
-//                            operationResult = -2;
-//                        }
-//                    }
-//                } else if (vehicle instanceof Bus){
-//                    for (int i = 0; i < floor.getSlotList().length; i++) {
-//                        if(i+1 < floor.getSlotList().length && i+2 < floor.getSlotList().length && i+3 < floor.getSlotList().length && i+4 < floor.getSlotList().length &&!floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied() && !floor.getSlotList()[i+3].isOccupied() && !floor.getSlotList()[i+4].isOccupied()) {
-//                            operationResult = -1;
-//                            unableToFindaSlot = false;
-//                            break;
-//                        }
-//                    }
-//                    if(unableToFindaSlot && floorLevel == 0) {
-//                        operationResult = -2;
-//                    }
-//                } else if (vehicle instanceof Lorry){
-//                    for (int i = 0; i < floor.getSlotList().length; i++) {
-//                        if(i+1 < floor.getSlotList().length && i+2 < floor.getSlotList().length && i+3 < floor.getSlotList().length && i+4 < floor.getSlotList().length && !floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied() && !floor.getSlotList()[i+3].isOccupied() && !floor.getSlotList()[i+4].isOccupied()) {
-//
-//                            operationResult = -1;
-//                            unableToFindaSlot = false;
-//                            break;
-//                        }
-//                    }
-//                    if(unableToFindaSlot && floorLevel == 0) {
-//                        operationResult = -2;
-//                    }
-////
-//                } else if (vehicle instanceof MiniBus){
-//                    for (int i = 0; i < floor.getSlotList().length; i++) {
-//                        if(i+1 < floor.getSlotList().length && i+2 < floor.getSlotList().length && !floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied()) {
-//                            operationResult = -1;
-//                            unableToFindaSlot = false;
-//                            break;
-//                        } if(unableToFindaSlot && floorLevel == 0) {
-//                            operationResult = -2;
-//                        }
-//                    }
-//                } else if (vehicle instanceof MiniLorry){
-//                    for (int i = 0; i < floor.getSlotList().length; i++) {
-//                        if(i+1 < floor.getSlotList().length && i+2 < floor.getSlotList().length && !floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied()) {
-//
-//                            operationResult = -1;
-//                            unableToFindaSlot = false;
-//                            break;
-//                        }
-//                    }
-//                    if(unableToFindaSlot && floorLevel == 0) {
-//                        operationResult = -2;
-//                    }
-//                } else if (vehicle instanceof MotorBike) {
-//                    boolean isBikeSlotFound = false;
-//                    for (int i = 0; i < floor.getSlotList().length; i++) {
-//                        if (floor.getSlotList()[i].getParkedVehicleType() != null && floor.getSlotList()[i].getParkedVehicleType().equals(VehicleType.MotorBike.name()) && floor.getSlotList()[i].getBikeSpaceArray().size() < 3) {
-//
-//                            isBikeSlotFound = true;
-//                            unableToFindaSlot = false;
-//                            break;
-//                        }
-//                    }
-//                    if (!isBikeSlotFound) {
-//                        changeBikePriority();
-//                        for (int i = 0; i < floor.getSlotList().length; i++) {
-//                            if (!floor.getSlotList()[i].isOccupied()) {
-//
-//                                unableToFindaSlot = false;
-//                                break;
-//                            }
-//                        }
-//                    }
-//                    if (unableToFindaSlot) {
-//                        if (floorLevel == 1) {
-//                            operationResult = 2;
-//                        } else if (floorLevel == 2) {
-//                            operationResult = 3;
-//                        } else if (floorLevel == 3) {
-//                            operationResult = 4;
-//                        } else if (floorLevel == 4) {
-//                            operationResult = 5;
-//                        } else if (floorLevel == 5) {
-//                            operationResult = 6;
-//                        } else {
-//                            operationResult = -2;
-//                        }
-//                    }
-//                }
-//                //Thread.sleep(1000);
-//            }
-//        } catch (Exception ex){
-//            operationResult = -3;
-//        } finally {
-//            lock.unlock();
-//            return operationResult;
-//        }
-//        //  addVehicleToFloor.start();
-//    }
+    public  synchronized  boolean findSpaceAvailabilityByVehicle (Vehicle vehicle) {
+        boolean isSpaceAvailable = false;
+        try{
+            lock.lock();
+            if (!Thread.currentThread().isInterrupted()) {
+                if(vehicle instanceof Car) {
+                    for (int i = 0; i < floor.getSlotList().length; i++) {
+                        if(!floor.getSlotList()[i].isOccupied()) {
+                            isSpaceAvailable = true;
+                            break;
+                        }
+                    }
+                } else if (vehicle instanceof Van){
+                    for (int i = 0; i < floor.getSlotList().length; i++) {
+                        if(i+1 < floor.getSlotList().length && !floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied()) {
+                            isSpaceAvailable = true;
+                            break;
+                        } }
+                } else if (vehicle instanceof Bus){
+                    for (int i = 0; i < floor.getSlotList().length; i++) {
+                        if(i+1 < floor.getSlotList().length && i+2 < floor.getSlotList().length && i+3 < floor.getSlotList().length && i+4 < floor.getSlotList().length &&!floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied() && !floor.getSlotList()[i+3].isOccupied() && !floor.getSlotList()[i+4].isOccupied()) {
+                            isSpaceAvailable = true;
+                            break;
+                        }
+                    }
+                } else if (vehicle instanceof Lorry){
+                    for (int i = 0; i < floor.getSlotList().length; i++) {
+                        if(i+1 < floor.getSlotList().length && i+2 < floor.getSlotList().length && i+3 < floor.getSlotList().length && i+4 < floor.getSlotList().length && !floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied() && !floor.getSlotList()[i+3].isOccupied() && !floor.getSlotList()[i+4].isOccupied()) {
+                            isSpaceAvailable = true;
+                            break;
+                        }
+                    }
+                } else if (vehicle instanceof MiniBus){
+                    for (int i = 0; i < floor.getSlotList().length; i++) {
+                        if(i+1 < floor.getSlotList().length && i+2 < floor.getSlotList().length && !floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied()) {
+                            isSpaceAvailable = true;
+                            break;
+                        }
+                    }
+                } else if (vehicle instanceof MiniLorry){
+                    for (int i = 0; i < floor.getSlotList().length; i++) {
+                        if(i+1 < floor.getSlotList().length && i+2 < floor.getSlotList().length && !floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied()) {
+                            isSpaceAvailable = true;
+                            break;
+                        }
+                    }
+
+                } else if (vehicle instanceof MotorBike) {
+                    boolean isBikeSlotFound = false;
+                    for (int i = 0; i < floor.getSlotList().length; i++) {
+                        if (floor.getSlotList()[i].getParkedVehicleType() != null && floor.getSlotList()[i].getParkedVehicleType().equals(VehicleType.MotorBike.name()) && floor.getSlotList()[i].getBikeSpaceArray().size() < 3) {
+                            isBikeSlotFound = true;
+                            isSpaceAvailable = true;
+                            break;
+                        }
+                    }
+                    if (!isBikeSlotFound) {
+                        changeBikePriority();
+                        for (int i = 0; i < floor.getSlotList().length; i++) {
+                            if (!floor.getSlotList()[i].isOccupied()) {
+                                isSpaceAvailable = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                //Thread.sleep(1000);
+            }
+        } catch (Exception ex){
+         ex.printStackTrace();
+        } finally {
+            lock.unlock();
+            return isSpaceAvailable;
+        }
+        //  addVehicleToFloor.start();
+    }
 
 
 

@@ -245,19 +245,23 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     break;
                 }
             } **/
+            int selectedFloor = searchForAvailableSlotsInAFloor(vehicle, floorNumber);
+            if (selectedFloor > 0) {
+                if(selectedFloor > 6) {
+                    pc.consume();
+                }
+                boolean isVehicleParked = setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(selectedFloor));
 
-            if(floorNumber > 6) {
-                pc.consume();
-            }
+                if (!isVehicleParked) {
+                    int nextPrioritizedFloor = getNextPrioritizedFloorForVehicle(vehicle, floorNumber);
+                    if (nextPrioritizedFloor > 0) {
+                        tryAndAddVehicleToFloor(vehicle, nextPrioritizedFloor);
+                    } else  {
+                        System.out.println("No space available to park " +vehicle.getBrand() +" "+vehicle.getModel()+" | "+ vehicle.getNoPlate() + " in car park");
+                    }
 
-            int nextFloorNum = setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(floorNumber));
-
-            if (nextFloorNum > 0) {
-                tryAndAddVehicleToFloor(vehicle, nextFloorNum);
-
-            } else if (nextFloorNum == -1) {
-                // synchronized ()listOfVehicles.add(vehicle);
-            } else if (nextFloorNum == -2) {
+                }
+            } else if (selectedFloor == -1) {
                 System.out.println("No space available to park " +vehicle.getBrand() +" "+vehicle.getModel()+" | "+ vehicle.getNoPlate() + " in car park");
             }
         }
@@ -265,6 +269,92 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
             e.printStackTrace();
         }
 
+    }
+
+    public int searchForAvailableSlotsInAFloor(Vehicle vehicle, int floorNumber) {
+
+        boolean foundASlotInFloor = floorManagers[floorNumber].findAvailabilityByVehicle(vehicle);
+        if(!foundASlotInFloor){
+            int nextAvailableFloor = getNextPrioritizedFloorForVehicle(vehicle, floorNumber);
+            if(nextAvailableFloor> 0) {
+                searchForAvailableSlotsInAFloor(vehicle, nextAvailableFloor);
+            }
+        } else {
+            return floorNumber;
+        }
+        return -1;
+    }
+
+    public static int getNextPrioritizedFloorForVehicle(Vehicle vehicle, int floorLevel) {
+            int operationResult = -4;
+                if (!Thread.currentThread().isInterrupted()) {
+                    if(vehicle instanceof Car) {
+                            if (floorLevel == 7) {
+                                operationResult = 8;
+                            }else if (floorLevel == 8) {
+                                operationResult = 1;
+                            } else if (floorLevel == 1) {
+                                operationResult = 2;
+                            } else if (floorLevel == 2) {
+                                operationResult = 3;
+                            } else if (floorLevel == 3) {
+                                operationResult = 4;
+                            } else if (floorLevel == 4) {
+                                operationResult = 5;
+                            } else if (floorLevel == 5) {
+                                operationResult = 6;
+                            } else {
+                                operationResult = -2;
+                            }
+                    } else if (vehicle instanceof Van){
+                            if (floorLevel == 1) {
+                                operationResult = 2;
+                            } else if (floorLevel == 2) {
+                                operationResult = 3;
+                            } else if (floorLevel == 3) {
+                                operationResult = 4;
+                            } else if (floorLevel == 4) {
+                                operationResult = 5;
+                            } else if (floorLevel == 5) {
+                                operationResult = 6;
+                            } else {
+                                operationResult = -2;
+                            }
+                    } else if (vehicle instanceof Bus){
+
+                        if(floorLevel == 0) {
+                            operationResult = -2;
+                        }
+                    } else if (vehicle instanceof Lorry){
+                        if(floorLevel == 0) {
+                            operationResult = -2;
+                        }
+//
+                    } else if (vehicle instanceof MiniBus){
+                        if(floorLevel == 0) {
+                            operationResult = -2;
+                        }
+                    } else if (vehicle instanceof MiniLorry){
+                        if(floorLevel == 0) {
+                            operationResult = -2;
+                        }
+                    } else if (vehicle instanceof MotorBike) {
+                            if (floorLevel == 1) {
+                                operationResult = 2;
+                            } else if (floorLevel == 2) {
+                                operationResult = 3;
+                            } else if (floorLevel == 3) {
+                                operationResult = 4;
+                            } else if (floorLevel == 4) {
+                                operationResult = 5;
+                            } else if (floorLevel == 5) {
+                                operationResult = 6;
+                            } else {
+                                operationResult = -2;
+                            }
+                    }
+                }
+            return operationResult;
     }
 
 
@@ -290,7 +380,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
     }
 
 
-    private synchronized int setThreadPriorityAndTryToAddVehicle(Vehicle vehicle, Floor floor) {
+    private synchronized boolean setThreadPriorityAndTryToAddVehicle(Vehicle vehicle, Floor floor) {
 
         if(vehicle instanceof Car) {
             if(floor.accessibleVehicles.contains(VehicleType.Car) && floor.prioritizedVehicles.contains(VehicleType.Car)){

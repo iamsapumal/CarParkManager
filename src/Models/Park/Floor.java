@@ -2,7 +2,7 @@ package Models.Park;
 
 import Models.Resources.EntranceDoor;
 import Models.Resources.ExitDoor;
-import Models.Resources.Lift;
+import Models.Resources.Lifts;
 import Models.Vehicles.*;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class Floor {
     public List<VehicleType> prioritizedVehicles;
     private EntranceDoor[] availableEntranceDoors;
     private ExitDoor[] availableExitDoors;
-    private Lift[] availableLifts;
+    private Lifts[] availableLifts;
     private int bikeCountForSlot = 3;
     public Floor(int floorNo, List<VehicleType> accessibleVehicles, List<VehicleType> prioritizedVehicles,int numberOfSlots) {
         this.floorNo = floorNo;

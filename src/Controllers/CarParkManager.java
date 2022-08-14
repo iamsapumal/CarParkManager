@@ -8,7 +8,7 @@ public interface CarParkManager {
 	
 	public static final int MAX=60; //Number of slots available in the Models.Resources.Vehicles.Car Park
 	
-	public void addVehicle(Vehicle obj);
+	public void addVehicle(Vehicle obj) throws InterruptedException;
 	public void deleteVehicle(String noPlate);
 	public void printcurrentVehicles();
 	public void printVehiclePercentage();

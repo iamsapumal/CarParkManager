@@ -8,7 +8,9 @@ public enum FloorNumber {
     FOURTH_FLOOR(4),
     FIFTH_FLOOR(5),
     SIXTH_FLOOR(6),
-    UPPER_FLOORS(7);
+    SEVENTH_FLOOR(7),
+    EIGHTH_FLOOR(8);
+
         private final int value;
 
         FloorNumber(final int newValue) {

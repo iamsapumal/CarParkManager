@@ -26,7 +26,11 @@ class Main {
             int choice = sc.nextInt();
             switch (choice) {
                 case 1:
-                    addVehicle();
+                    try {
+                        addVehicle();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 2:
                     deleteVehicle();
@@ -104,7 +108,7 @@ class Main {
         pettahCarParkManager.printLatestPark();
     }
 
-    private static void addVehicle() {
+    private static void addVehicle() throws InterruptedException {
         //getting choice from the user
         System.out.println("Select your choice : ");
         System.out.println("******************");

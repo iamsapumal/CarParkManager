@@ -5,7 +5,6 @@ import Util.DateTime;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -18,10 +17,10 @@ public class Simulator {
     private static PettahMultiStoryCarParkManager pettahCarParkManager =  PettahMultiStoryCarParkManager.getInstance();
     public static void main(String[] args) {
         ArrayList<Vehicle> vehicles = new ArrayList<>();
-        PriorityBlockingQueue<Vehicle> carParkGateNorthGate1Queue = new PriorityBlockingQueue<>(vehicleCount,new Compairing());
-        PriorityBlockingQueue<Vehicle> carParkGateNorthGate2Queue = new PriorityBlockingQueue<>(vehicleCount,new Compairing());
-        PriorityBlockingQueue<Vehicle> carParkGateSouthGate1Queue = new PriorityBlockingQueue<>(vehicleCount,new Compairing());
-        PriorityBlockingQueue<Vehicle> carParkGateSouthGate2Queue = new PriorityBlockingQueue<>(vehicleCount,new Compairing());
+        PriorityBlockingQueue<Vehicle> carParkGateNorthGate1Queue = new PriorityBlockingQueue<>(vehicleCount,new VehicleComparator());
+        PriorityBlockingQueue<Vehicle> carParkGateNorthGate2Queue = new PriorityBlockingQueue<>(vehicleCount,new VehicleComparator());
+        PriorityBlockingQueue<Vehicle> carParkGateSouthGate1Queue = new PriorityBlockingQueue<>(vehicleCount,new VehicleComparator());
+        PriorityBlockingQueue<Vehicle> carParkGateSouthGate2Queue = new PriorityBlockingQueue<>(vehicleCount,new VehicleComparator());
 
         for (int i = 0; i < vehicleCount; i++) {
             Vehicle v = null;

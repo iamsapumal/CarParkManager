@@ -8,8 +8,8 @@ public class MiniLorry extends Vehicle {
     private double length;
 	
 	//Constructor
-	public MiniLorry(String noPlate, String brand, String model, DateTime entryTime) {
-		super(noPlate, brand, model, entryTime);
+	public MiniLorry(String noPlate, String brand, String model, DateTime entryTime,int entrancePriority) {
+		super(noPlate, brand, model, entryTime,entrancePriority);
 		this.cargoVolume=cargoVolume;
         this.length=length;
 	}

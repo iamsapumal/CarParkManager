@@ -20,7 +20,8 @@ public class FloorManager {
     }
 
     public  synchronized  int addVehicle (Vehicle vehicle) {
-        int operationResult = - 2;
+        int operationResult = -4;
+        boolean unableToPark = true;
         try{
             lock.lock();
             if (!Thread.currentThread().isInterrupted()) {
@@ -30,26 +31,30 @@ public class FloorManager {
                             floor.getSlotList()[i].setVehiclePlateNo(vehicle.getNoPlate());
                             floor.getSlotList()[i].setOccupied(true);
                             floor.getSlotList()[i].setParkedVehicleType(VehicleType.Car.name());
-                            //   listOfVehicles.add(vehicle);
-                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
+                            System.out.println("Car with number " + vehicle.getNoPlate() + " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex());
                             slotAllocationFinished(vehicle);
                             operationResult = -1;
-                            break;
+                            unableToPark = false;
+                             break;
                             // notifyAll();
                         }
                     }
-                    if(floorLevel == 7) {
-                        operationResult = 1;
-                    } else if(floorLevel == 1) {
-                        operationResult = 2;
-                    }  else if(floorLevel == 2) {
-                        operationResult = 3;
-                    } else if(floorLevel == 3) {
-                        operationResult = 4;
-                    } else if(floorLevel == 4) {
-                        operationResult = 5;
-                    } else if(floorLevel == 5) {
-                        operationResult = 6;
+                    if (unableToPark) {
+                        if (floorLevel == 7) {
+                            operationResult = 1;
+                        } else if (floorLevel == 1) {
+                            operationResult = 2;
+                        } else if (floorLevel == 2) {
+                            operationResult = 3;
+                        } else if (floorLevel == 3) {
+                            operationResult = 4;
+                        } else if (floorLevel == 4) {
+                            operationResult = 5;
+                        } else if (floorLevel == 5) {
+                            operationResult = 6;
+                        } else {
+                            operationResult = -2;
+                        }
                     }
                 } else if (vehicle instanceof Van){
                     for (int i = 0; i < floor.getSlotList().length; i++) {
@@ -64,24 +69,27 @@ public class FloorManager {
                             vehicle.setParkedFloorNumber(floorLevel);
                             vehicle.setParkedSlotNumber(floorLevel);
                             //   listOfVehicles.add(vehicle);
-                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
+                            System.out.println("Van | number plate: " +vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
                             operationResult = -1;
+                            unableToPark = false;
                             break;
                         } }
-                        // notifyAll();
-                    if(floorLevel == 1) {
-                        operationResult = 2;
-                    } else if(floorLevel == 2) {
-                        operationResult = 3;
-                    } else if(floorLevel == 3) {
-                        operationResult = 4;
-                    } else if(floorLevel == 4) {
-                        operationResult = 5;
-                    } else if(floorLevel == 5) {
-                        operationResult = 6;
+                    if (unableToPark) {
+                        if (floorLevel == 1) {
+                            operationResult = 2;
+                        } else if (floorLevel == 2) {
+                            operationResult = 3;
+                        } else if (floorLevel == 3) {
+                            operationResult = 4;
+                        } else if (floorLevel == 4) {
+                            operationResult = 5;
+                        } else if (floorLevel == 5) {
+                            operationResult = 6;
+                        } else {
+                            operationResult = -2;
+                        }
                     }
-
                 } else if (vehicle instanceof Bus){
                     for (int i = 0; i < floor.getSlotList().length; i++) {
                         if(!floor.getSlotList()[i].isOccupied() && !floor.getSlotList()[i+1].isOccupied() && !floor.getSlotList()[i+2].isOccupied() && !floor.getSlotList()[i+3].isOccupied() && !floor.getSlotList()[i+4].isOccupied()) {
@@ -107,13 +115,14 @@ public class FloorManager {
                             vehicle.setParkedFloorNumber(floorLevel);
                             vehicle.setParkedSlotNumber(floorLevel);
                             //   listOfVehicles.add(vehicle);
-                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
+                            System.out.println("Bus | number plate: " + vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
                             operationResult = -1;
+                            unableToPark = false;
                             break;
                         }
                     }
-                    if(floorLevel == 0) {
+                    if(unableToPark && floorLevel == 0) {
                         operationResult = -2;
                     }
                 } else if (vehicle instanceof Lorry){
@@ -142,13 +151,14 @@ public class FloorManager {
                             vehicle.setParkedFloorNumber(floorLevel);
                             vehicle.setParkedSlotNumber(floorLevel);
                             //   listOfVehicles.add(vehicle);
-                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
+                            System.out.println("Lorry | number plate: " + vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
                             operationResult = -1;
+                            unableToPark = false;
                             break;
                         }
                     }
-                    if(floorLevel == 0) {
+                    if(unableToPark && floorLevel == 0) {
                         operationResult = -2;
                     }
 //
@@ -169,11 +179,12 @@ public class FloorManager {
                             vehicle.setParkedFloorNumber(floorLevel);
                             vehicle.setParkedSlotNumber(floorLevel);
                             //   listOfVehicles.add(vehicle);
-                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
+                            System.out.println("MiniBus | number plate: " +vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
                             operationResult = -1;
+                            unableToPark = false;
                             break;
-                        } if(floorLevel == 0) {
+                        } if(unableToPark && floorLevel == 0) {
                             operationResult = -2;
                         }
                     }
@@ -195,37 +206,55 @@ public class FloorManager {
                             vehicle.setParkedFloorNumber(floorLevel);
                             vehicle.setParkedSlotNumber(floorLevel);
                             //   listOfVehicles.add(vehicle);
-                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
+                            System.out.println("MiniLorry | number plate: " + vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
                             operationResult = -1;
+                            unableToPark = false;
                             break;
                         }
                     }
-                    if(floorLevel == 0) {
+                    if(unableToPark && floorLevel == 0) {
                         operationResult = -2;
                     }
-                } else if (vehicle instanceof MotorBike){
+                } else if (vehicle instanceof MotorBike) {
                     boolean isBikeSlotFound = false;
                     for (int i = 0; i < floor.getSlotList().length; i++) {
-                        if (floor.getSlotList()[i].getParkedVehicleType() != null && floor.getSlotList()[i].getParkedVehicleType().equals(VehicleType.MotorBike.name()) && floor.getSlotList()[i].getBikeSpaceArray().size() <3){
+                        if (floor.getSlotList()[i].getParkedVehicleType() != null && floor.getSlotList()[i].getParkedVehicleType().equals(VehicleType.MotorBike.name()) && floor.getSlotList()[i].getBikeSpaceArray().size() < 3) {
                             floor.getSlotList()[i].getBikeSpaceArray().add(vehicle.getNoPlate());
                             floor.getSlotList()[i].setOccupied(true);
-                            System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex());
+                            System.out.println("Bike | number plate: " + vehicle.getNoPlate() + " Parked at " + floor.getFloorNo() + " Slot " + floor.getSlotList()[i].getIndex());
                             slotAllocationFinished(vehicle);
                             isBikeSlotFound = true;
+                            unableToPark = false;
                             break;
                         }
                     }
                     if (!isBikeSlotFound) {
                         for (int i = 0; i < floor.getSlotList().length; i++) {
-                            if(!floor.getSlotList()[i].isOccupied()) {
+                            if (!floor.getSlotList()[i].isOccupied()) {
                                 floor.getSlotList()[i].getBikeSpaceArray().add(vehicle.getNoPlate());
                                 floor.getSlotList()[i].setOccupied(true);
-                                System.out.println(vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex());
+                                System.out.println("Bike | number plate: " + vehicle.getNoPlate() + " Parked at " + floor.getFloorNo() + " Slot " + floor.getSlotList()[i].getIndex());
                                 floor.getSlotList()[i].setParkedVehicleType(VehicleType.MotorBike.name());
                                 slotAllocationFinished(vehicle);
+                                unableToPark = false;
                                 break;
                             }
+                        }
+                    }
+                    if (unableToPark) {
+                        if (floorLevel == 1) {
+                            operationResult = 2;
+                        } else if (floorLevel == 2) {
+                            operationResult = 3;
+                        } else if (floorLevel == 3) {
+                            operationResult = 4;
+                        } else if (floorLevel == 4) {
+                            operationResult = 5;
+                        } else if (floorLevel == 5) {
+                            operationResult = 6;
+                        } else {
+                            operationResult = -2;
                         }
                     }
                 }

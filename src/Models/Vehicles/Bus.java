@@ -7,8 +7,8 @@ public class Bus extends Vehicle {
 	private int seatCount;
 	
 	//Constructor
-	public Bus(String noPlate, String brand, String model, DateTime entryTime) {
-		super(noPlate, brand, model, entryTime);
+	public Bus(String noPlate, String brand, String model, DateTime entryTime,int entrancePriority) {
+		super(noPlate, brand, model, entryTime, entrancePriority);
 		this.seatCount=seatCount;
 	}
 	
@@ -17,6 +17,13 @@ public class Bus extends Vehicle {
 	}
 	public void setSeatCount(int seatCount) {
 		this.seatCount=seatCount;
+	}
+
+	@Override
+	public String toString() {
+		return "Bus{" +
+				"seatCount=" + seatCount +
+				'}';
 	}
 
 }

@@ -11,8 +11,8 @@ public class Car extends Vehicle {
 	private Color color;
 	
 	//Constructor
-	public Car(String noPlate, String brand, String model, DateTime entryTime) {
-		super(noPlate, brand, model, entryTime);
+	public Car(String noPlate, String brand, String model, DateTime entryTime,int entrancePriority) {
+		super(noPlate, brand, model, entryTime,entrancePriority);
 //		this.doors=doors;
 //		this.color=color;
 	}

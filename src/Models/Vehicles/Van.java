@@ -7,8 +7,8 @@ public class Van extends Vehicle {
 	private double cargoVolume;
 	
 	//Constructor
-	public Van(String noPlate, String brand, String model, DateTime entryTime, double cargoVolume) {
-		super(noPlate, brand, model, entryTime);
+	public Van(String noPlate, String brand, String model, DateTime entryTime, double cargoVolume,int entrancePriority) {
+		super(noPlate, brand, model, entryTime,entrancePriority);
 		this.cargoVolume=cargoVolume;
 	}
 	

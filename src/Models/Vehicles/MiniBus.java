@@ -7,8 +7,8 @@ public class MiniBus extends Vehicle {
 	private int seatCount;
 	
 	//Constructor
-	public MiniBus(String noPlate, String brand, String model, DateTime entryTime) {
-		super(noPlate, brand, model, entryTime);
+	public MiniBus(String noPlate, String brand, String model, DateTime entryTime,int entrancePriority) {
+		super(noPlate, brand, model, entryTime,entrancePriority);
 		this.seatCount=seatCount;
 	}
 	

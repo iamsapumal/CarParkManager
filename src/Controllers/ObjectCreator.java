@@ -45,7 +45,7 @@ public class ObjectCreator {
 //			Color carColor=new Color(Integer.parseInt(colorArr[0]),
 //					Integer.parseInt(colorArr[1]),Integer.parseInt(colorArr[2]));
 
-				obj=new Car(plateID,brand,model,entryTime);
+				obj=new Car(plateID,brand,model,entryTime, 1);
 				break;
 			//22/12/2021-12:12:12
 			case Van:
@@ -55,30 +55,30 @@ public class ObjectCreator {
 				System.out.println("Enter the number of seats : ");
 				int seats=sc.nextInt();
 
-				obj=new Van(plateID,brand,model,entryTime,cargoCapacity);
+				obj=new Van(plateID,brand,model,entryTime,cargoCapacity,2);
 				break;
 
 			case MotorBike:
 				System.out.println("Enter the Engine Size : ");
 				String engineSize=sc.next();
 
-				obj=new MotorBike(plateID,brand,model,entryTime,engineSize);
+				obj=new MotorBike(plateID,brand,model,entryTime,engineSize,2);
 				break;
 
 			case Bus:
-				obj=new Bus(plateID,brand,model,entryTime);
+				obj=new Bus(plateID,brand,model,entryTime,2);
 				break;
 
 			case Lorry:
-				obj=new MiniBus(plateID,brand,model,entryTime);
+				obj=new MiniBus(plateID,brand,model,entryTime,2);
 				break;
 
 			case MiniBus:
-				obj=new MiniLorry(plateID,brand,model,entryTime);
+				obj=new MiniLorry(plateID,brand,model,entryTime,2);
 				break;
 
 			case MiniLorry:
-				obj=new Lorry(plateID,brand,model,entryTime);
+				obj=new Lorry(plateID,brand,model,entryTime,2);
 				break;
 
 			default :

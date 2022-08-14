@@ -13,8 +13,8 @@ public class Car extends Vehicle {
 	//Constructor
 	public Car(String noPlate, String brand, String model, DateTime entryTime,int entrancePriority) {
 		super(noPlate, brand, model, entryTime,entrancePriority);
-//		this.doors=doors;
-//		this.color=color;
+		this.doors=doors;
+		this.color=color;
 	}
 	
 	public int getDoors() {

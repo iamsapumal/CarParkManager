@@ -361,7 +361,7 @@ public class FloorManager {
     private synchronized void slotAllocationFinished(Vehicle vehicle) {
         PettahMultiStoryCarParkManager.listOfVehicles.add(vehicle);
         Thread.currentThread().interrupt();
-        System.out.println(Thread.currentThread().getName() + " Interrupted");
+        //System.out.println(Thread.currentThread().getName() + " Interrupted");
         //latch.countDown();
     }
 

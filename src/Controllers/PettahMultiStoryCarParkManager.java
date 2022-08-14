@@ -17,19 +17,21 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
     public static  ConcurrentLinkedQueue<Vehicle> listOfVehicles = new ConcurrentLinkedQueue();
     public static  List<Lift> LIFTS = new ArrayList<>();
     private static PettahMultiStoryCarParkManager instance = null;
-    private int availableSlots = 20;
-    private double chargePerHour = 50;
-    private double addCharge = 75;
-    private double maxCharge = 1250;
-    private int addFromthisHour =3;
 
-    private int floorCount = 9;
+
+    private  static final int totalSlotsInaFloor = 60;
+    private static final int floorCount = 9;
     private int slotsForFloor = 60;
 
     private final int LIFT_COUNT = 4;
     private Queue<Lifts>  queue = new LinkedList<Lifts>();
 
-    private int bikeCountForSlot = 3;
+    private int availableSlots = totalSlotsInaFloor * floorCount;
+    private double chargePerHour = 50;
+    private double addCharge = 75;
+    private double maxCharge = 1250;
+    private int addFromthisHour =3;
+
     List<Floor> pettahMultiStoryCarPark;
 
     private FloorManager[] floorManagers = new FloorManager[floorCount];
@@ -38,6 +40,10 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         this.pettahMultiStoryCarPark = createCarParkVirtualModel(); // make it syncronize
         createFloorManagers();
     }
+
+    /**
+     * initialize lifsts
+     */
 
     public static void CreateLifts() {
         Lift  lift_1 = new Lift("LIFT_1", 1, false);
@@ -51,6 +57,10 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         LIFTS.add(lift_4);
     }
 
+    /**
+     * Create car park virtual model
+     * @return
+     */
     public static List<Floor> createCarParkVirtualModel() {
 
         CreateLifts();
@@ -62,7 +72,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> groundFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Van
         ));
-        Floor groundFloor = new Floor(0, groundFloorPrioritisedVehicles,groundFloorAccessibleVehicles, 60);
+        Floor groundFloor = new Floor(0, groundFloorPrioritisedVehicles,groundFloorAccessibleVehicles, totalSlotsInaFloor);
 
 
         List<VehicleType> firstFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
@@ -71,9 +81,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> firstFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
-        Floor firstFloor = new Floor(1, firstFloorPrioritisedVehicles,firstFloorAccessibleVehicles, 60);
-
-
+        Floor firstFloor = new Floor(1, firstFloorPrioritisedVehicles,firstFloorAccessibleVehicles, totalSlotsInaFloor);
 
 
         List<VehicleType> secondFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
@@ -82,9 +90,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> secondFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
-        Floor secondFloor = new Floor(2, secondFloorPrioritisedVehicles,secondFloorAccessibleVehicles, 60);
-
-
+        Floor secondFloor = new Floor(2, secondFloorPrioritisedVehicles,secondFloorAccessibleVehicles, totalSlotsInaFloor);
 
 
         List<VehicleType> thirdFloorPrioritisedVehicles = Collections.synchronizedList(Arrays.asList(
@@ -93,7 +99,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> thirdFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
-        Floor thirdFloor = new Floor(3, groundFloorPrioritisedVehicles,groundFloorAccessibleVehicles, 60);
+        Floor thirdFloor = new Floor(3, groundFloorPrioritisedVehicles,groundFloorAccessibleVehicles, totalSlotsInaFloor);
 
 
         List<VehicleType> fourthFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
@@ -102,7 +108,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> fourthFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car, VehicleType.Van
         ));
-        Floor fourthFloor = new Floor(4, fourthFloorPrioritisedVehicles,fourthFloorAccessibleVehicles, 60);
+        Floor fourthFloor = new Floor(4, fourthFloorPrioritisedVehicles,fourthFloorAccessibleVehicles, totalSlotsInaFloor);
 
 
         List<VehicleType> fifthFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
@@ -111,7 +117,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> fifthFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car
         ));
-        Floor fifthFloor = new Floor(5, fifthFloorPrioritisedVehicles,fifthFloorAccessibleVehicles, 60);
+        Floor fifthFloor = new Floor(5, fifthFloorPrioritisedVehicles,fifthFloorAccessibleVehicles, totalSlotsInaFloor);
 
 
         List<VehicleType> sixthFloorPrioritisedVehicles= Collections.synchronizedList(Arrays.asList(
@@ -120,7 +126,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> sixthFloorAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car
         ));
-        Floor sixthFloor = new Floor(6, sixthFloorPrioritisedVehicles,sixthFloorAccessibleVehicles, 60);
+        Floor sixthFloor = new Floor(6, sixthFloorPrioritisedVehicles,sixthFloorAccessibleVehicles, totalSlotsInaFloor);
 
 
 
@@ -130,8 +136,8 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         List<VehicleType> upperThreeAccessibleVehicles = Collections.synchronizedList(Arrays.asList(
                 VehicleType.Car
         ));
-        Floor seventhFloor = new Floor(7, upperThreeAccessibleVehicles,upperThreeFloorsPrioritisedVehicles, 60);
-        Floor eightFloor = new Floor(8, upperThreeAccessibleVehicles,upperThreeFloorsPrioritisedVehicles, 60);
+        Floor seventhFloor = new Floor(7, upperThreeAccessibleVehicles,upperThreeFloorsPrioritisedVehicles, totalSlotsInaFloor);
+        Floor eightFloor = new Floor(8, upperThreeAccessibleVehicles,upperThreeFloorsPrioritisedVehicles, totalSlotsInaFloor);
 
         pettahMultiStoryCarPark.add(groundFloor);
         pettahMultiStoryCarPark.add(firstFloor);
@@ -146,6 +152,9 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         return pettahMultiStoryCarPark;
     }
 
+    /**
+     * createFloorManagers
+     */
     public void createFloorManagers() {
         for (int i = 0; i < this.pettahMultiStoryCarPark.size(); i++) {
             FloorManager floorManager = new FloorManager(i, this.pettahMultiStoryCarPark.get(i));
@@ -165,7 +174,11 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         return instance;
     }
 
-
+    /**
+     * add Vehicles
+     * @param vehicle
+     * @throws InterruptedException
+     */
     @Override
     public void addVehicle(Vehicle vehicle) throws InterruptedException {
         //check whether the vehicle is already parked or not
@@ -183,9 +196,6 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                             break;
                         }
                     }
-                    if(isVehicleParked || Thread.currentThread().isInterrupted()) {
-
-                    };
 
                     if (vehicle instanceof Car) {
                         tryAndAddVehicleToFloor(vehicle, FloorNumber.SEVENTH_FLOOR.getValue());
@@ -232,8 +242,6 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
     public void tryAndAddVehicleToFloor(Vehicle vehicle, int floorNumber) {
         final Lifts pc = Lifts.getInstance();
         try {
-
-
             // Enable to use LIFTS with names
          /*   Integer liftNumber = 0;
             while (true) {
@@ -251,7 +259,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     pc.consume();
                 }
                 boolean isVehicleParked = setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(selectedFloor));
-
+                updateTotalAvailableCount();
                 if (!isVehicleParked) {
                     int nextPrioritizedFloor = getNextPrioritizedFloorForVehicle(vehicle, floorNumber);
                     if (nextPrioritizedFloor > 0) {
@@ -271,6 +279,13 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
 
     }
 
+    /**
+     * updateTotalAvailableCount
+     */
+    public void updateTotalAvailableCount() {
+        availableSlots = availableSlots - listOfVehicles.size();
+    }
+
     public int searchForAvailableSlotsInAFloor(Vehicle vehicle, int floorNumber) {
 
         boolean foundASlotInFloor = floorManagers[floorNumber].findAvailabilityByVehicle(vehicle);
@@ -285,6 +300,12 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         return -1;
     }
 
+    /**
+     * get Next Prioritized Floor For Vehicle
+     * @param vehicle
+     * @param floorLevel
+     * @return
+     */
     public static int getNextPrioritizedFloorForVehicle(Vehicle vehicle, int floorLevel) {
             int operationResult = -4;
                 if (!Thread.currentThread().isInterrupted()) {
@@ -358,28 +379,56 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
     }
 
 
+    /**
+     * deleteVehicle
+     * @param IdPlate
+     */
     @Override
     public void deleteVehicle(String IdPlate) {
+        boolean isVehicleFound = false;
         for(Vehicle item: listOfVehicles) {
             //Checking for a particular vehicle with its' plate ID
             if(item.getNoPlate().equals(IdPlate)) {
-                System.out.println("Models.Resources.Vehicles.Vehicle Found.");
+                System.out.println(" Vehicles Found");
+                isVehicleFound = true;
                 if(item instanceof Van) {
-                    availableSlots+=2;
-                    System.out.println("Space cleared after deleting a Models.Resources.Vehicles.Van.\nAvailable Slots : "
+                    availableSlots += 2;
+                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                            + availableSlots);
+                }    else if(item instanceof Bus) {
+                    availableSlots += 5;
+                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                            + availableSlots);
+                }    else if(item instanceof Lorry) {
+                    availableSlots += 5;
+                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                            + availableSlots);
+                }    else if(item instanceof MiniLorry) {
+                    availableSlots += 3;
+                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
                             +availableSlots);
-                }else{
+                }    else if(item instanceof MiniBus) {
+                    availableSlots+=3;
+                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                            + availableSlots);
+                } else {
                     availableSlots++;
                     System.out.println("Space cleared after deleting a vehicle.\nAvailable Slots : "
-                            +availableSlots);
+                            + availableSlots);
                 }
-            }else {
-                System.out.println("Models.Resources.Vehicles.Vehicle not found.");
             }
+        }
+        if (!isVehicleFound) {
+            System.out.println("Vehicle not found");
         }
     }
 
-
+    /**
+     * set Thread Priority as required a nd Try To Add Vehicle
+     * @param vehicle
+     * @param floor
+     * @return
+     */
     private synchronized boolean setThreadPriorityAndTryToAddVehicle(Vehicle vehicle, Floor floor) {
 
         if(vehicle instanceof Car) {
@@ -426,16 +475,19 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
             }
         }
         return floorManagers[floor.getFloorNo()].addVehicle(vehicle);
-//            }
-//        }
     }
 
+    /**
+     * slotAllocationFinished
+     * @param group
+     */
     private synchronized void slotAllocationFinished(ThreadGroup group) {
         group.interrupt();
         Thread.currentThread().interrupt();
-        System.out.println(Thread.currentThread().getName() + " Interrupted");
+        //System.out.println(Thread.currentThread().getName() + " Interrupted");
         //latch.countDown();
     }
+
 
     public Integer tryAndOccupyALift() {
         Lock lock = new ReentrantLock();
@@ -483,16 +535,19 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
     }
 
 
+    /**
+     * printcurrentVehicles
+     */
     @Override
     public void printcurrentVehicles() {
         //   Collections.sort(listOfVehicles, Collections.reverseOrder());
         for( Vehicle item:listOfVehicles) {
             if(item instanceof Van) {
-                System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.Van");
+                System.out.println(" Vehicle Type is a  Van");
             }else if(item instanceof MotorBike) {
-                System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.MotorBike");
+                System.out.println(" Vehicle Type is a  MotorBike");
             }else {
-                System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.Car.");
+                System.out.println(" Vehicle Type is a  Car.");
             }
             System.out.println("******************");
             System.out.println("ID Plate : "+item.getNoPlate());
@@ -504,6 +559,9 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         }
     }
 
+    /**
+     * printLongestPark
+     */
     @Override
     public void printLongestPark() {
         //sort to the ascending order
@@ -511,13 +569,25 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         System.out.println("The longest parked vehicle is : ");
         System.out.println("................................................");
         System.out.println("ID Plate : "+listOfVehicles.peek().getNoPlate());
+
         if(listOfVehicles.peek() instanceof Car) {
-            System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.Car.");
+            System.out.println(" Vehicle Type is a  Car.");
+        } else if(listOfVehicles.peek() instanceof MotorBike) {
+            System.out.println(" Vehicle Type is a  MotorBike.");
         }else if(listOfVehicles.peek() instanceof Van){
-            System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.Van.");
-        }else {
-            System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.MotorBike.");
+            System.out.println(" Vehicle Type is a  Van.");
+        } else if(listOfVehicles.peek() instanceof MiniBus) {
+            System.out.println(" Vehicle Type is a  MiniBus.");
+        } else if(listOfVehicles.peek() instanceof MiniLorry) {
+            System.out.println(" Vehicle Type is a  MiniLorry.");
+        } else if(listOfVehicles.peek() instanceof Bus) {
+            System.out.println(" Vehicle Type is a  Bus.");
+        } else if(listOfVehicles.peek() instanceof Lorry) {
+            System.out.println(" Vehicle Type is a  Lorry.");
+        } else {
+            System.out.println(" Vehicle Type Unidentified.");
         }
+
         System.out.println("Parked Time : "+listOfVehicles.peek().getEntryDate().getHours()
                 +":"+listOfVehicles.peek().getEntryDate().getMinutes()
                 +":"+listOfVehicles.peek().getEntryDate().getSeconds());
@@ -526,6 +596,10 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                 +"/"+listOfVehicles.peek().getEntryDate().getYear());
     }
 
+
+    /**
+     * printLatestPark
+     */
     @Override
     public void printLatestPark() {
         // sort to the descending order
@@ -534,11 +608,21 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         System.out.println("..............................................");
         System.out.println("ID Plate : "+listOfVehicles.peek().getNoPlate());
         if(listOfVehicles.peek() instanceof Car) {
-            System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.Car.");
+            System.out.println(" Vehicle Type is a  Car.");
+        } else if(listOfVehicles.peek() instanceof MotorBike) {
+            System.out.println(" Vehicle Type is a  MotorBike.");
         }else if(listOfVehicles.peek() instanceof Van){
-            System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.Van.");
-        }else {
-            System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.MotorBike.");
+            System.out.println(" Vehicle Type is a  Van.");
+        } else if(listOfVehicles.peek() instanceof MiniBus) {
+            System.out.println(" Vehicle Type is a  MiniBus.");
+        } else if(listOfVehicles.peek() instanceof MiniLorry) {
+            System.out.println(" Vehicle Type is a  MiniLorry.");
+        } else if(listOfVehicles.peek() instanceof Bus) {
+            System.out.println(" Vehicle Type is a  Bus.");
+        } else if(listOfVehicles.peek() instanceof Lorry) {
+            System.out.println(" Vehicle Type is a  Lorry.");
+        } else {
+            System.out.println(" Vehicle Type Unidentified.");
         }
         System.out.println("Parked Time : "+listOfVehicles.peek().getEntryDate().getHours()
                 +":"+listOfVehicles.peek().getEntryDate().getMinutes()
@@ -548,6 +632,10 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                 +"/"+listOfVehicles.peek().getEntryDate().getYear());
     }
 
+    /**
+     * printVehicleByDay
+     * @param givenDate
+     */
     @Override
     public void printVehicleByDay(DateTime givenDate) {
         for(Vehicle item:listOfVehicles) {
@@ -561,13 +649,22 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                         item.getEntryDate().getMonth()+"/"+item.getEntryDate().getHours()+"-"
                         +item.getEntryDate().getHours()+":"+item.getEntryDate().getMinutes()
                         +":"+item.getEntryDate().getYear());
-
-                if(item instanceof Van) {
-                    System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.Van");
+                if (item instanceof MotorBike) {
+                    System.out.println("Vehicle Type is a MotorBike.");
+                } else if (item instanceof Lorry) {
+                    System.out.println("Vehicle Type is a Lorry.");
+                } else if (item instanceof Bus) {
+                    System.out.println("Vehicle Type is a Bus.");
+                } else if (item instanceof MiniBus) {
+                    System.out.println("Vehicle Type is a MiniBus.");
+                } else if (item instanceof MiniLorry) {
+                    System.out.println("Vehicle Type is a MiniLorry.");
+                } else if(item instanceof Van) {
+                    System.out.println(" Vehicle Type is a  Van");
                 }else if(item instanceof MotorBike) {
-                    System.out.println("Models.Resources.Vehicles.Vehicle Type is a Motor Bike.");
+                    System.out.println(" Vehicle Type is a Motor Bike.");
                 }else {
-                    System.out.println("Models.Resources.Vehicles.Vehicle Type is a Models.Resources.Vehicles.Car.");
+                    System.out.println(" Vehicle Type is a  Car.");
                 }
                 System.out.println("--------------------------");
                 System.out.println("\n");
@@ -575,37 +672,70 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         }
     }
 
+    /**
+     * printVehiclePercentage
+     */
     @Override
     public void printVehiclePercentage() {
         int numCars=0;
         int numBikes=0;
         int numVans=0;
+        int numMiniLorries = 0;
+        int numMiniBuses = 0;
+        int numBuses = 0;
+        int numLorries = 0;
+
+
         for(Vehicle item:listOfVehicles) {
             if(item instanceof Car) {
                 numCars++;
             }else if(item instanceof MotorBike) {
                 numBikes++;
-            }else {
+            }  else if (item instanceof Van) {
                 numVans++;
+            } else if (item instanceof MiniBus) {
+                numMiniBuses++;
+            } else if (item instanceof MiniLorry) {
+                numMiniLorries++;
+            }  else if (item instanceof Lorry) {
+                numLorries++;
+            } else if (item instanceof Bus) {
+                numBuses++;
             }
         }
+
         double carPercentage = (numCars/listOfVehicles.size())*100;
         double bikePercentage = (numBikes/listOfVehicles.size())*100;
         double vanPercentage = (numVans/listOfVehicles.size())*100;
+        double miniBusPercentage = (numMiniBuses / listOfVehicles.size()) * 100;
+        double miniLorryPercentage = (numMiniLorries / listOfVehicles.size()) * 100;
+        double busPercentage = (numBuses / listOfVehicles.size()) * 100;
+        double lorryPercentage = (numLorries / listOfVehicles.size()) * 100;
 
-        System.out.printf("Models.Resources.Vehicles.Car Percentage is : %.f ",carPercentage);
-        System.out.printf("\nBike Percentage is : %.f ",bikePercentage);
-        System.out.printf("\nModels.Resources.Vehicles.Van Percentage is : %.f ",vanPercentage);
+        System.out.println("Car Percentage is : " + carPercentage);
+        System.out.println("\nBike Percentage is : " + bikePercentage);
+        System.out.println("\n Van Percentage is : " + vanPercentage);
+        System.out.println("\nMini Bus Percentage is : " + miniBusPercentage);
+        System.out.println("\nMini Lorry Percentage is : " + miniLorryPercentage);
+        System.out.println("\nBus Percentage is :  " + busPercentage);
+        System.out.println("\nLorry Percentage is : " + lorryPercentage);
+
         System.out.println("\n");
     }
 
+    /**
+     * calculateChargers
+     * @param plateID
+     * @param currentTime
+     * @return
+     */
     @Override
     public BigDecimal calculateChargers(String plateID, DateTime currentTime) {
         boolean found = false;
         BigDecimal charges = null;
         for(Vehicle item:listOfVehicles) {
             if(item.getNoPlate().equals(plateID)) {
-                System.out.println("Models.Resources.Vehicles.Vehicle found.");
+                System.out.println(" Vehicle found.");
                 //vehicle parked time
                 System.out.println("Parked Time : "+item.getEntryDate().getDate()+"/"
                         +item.getEntryDate().getMonth()+"/"+item.getEntryDate().getDate()
@@ -619,7 +749,8 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
 
                 double dayCharge=0;
                 double hourCharge = 0;
-                double totalCost=0;
+                double totalCostForaSlot =0;
+                double totalCost = 0;
                 double days = differenceInHours/24;
 
                 if(days>1) {
@@ -629,20 +760,38 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     double additional = (differenceInHours-addFromthisHour) ;
                     hourCharge=(additional*addCharge)+(addFromthisHour *chargePerHour);
                     System.out.printf("hour Charge : %.2f",hourCharge);
-                }else if(differenceInHours<1) {
+                } else if(differenceInHours<1) {
                     hourCharge = chargePerHour;
-                }else {
+                } else {
                     hourCharge=(differenceInHours * chargePerHour);
                 }
 
-                totalCost=dayCharge + hourCharge;
+                totalCostForaSlot = dayCharge + hourCharge;
+
+                if (item instanceof Car) {
+                    totalCost = totalCostForaSlot;
+                }  else if (item instanceof MotorBike) {
+                    totalCost = totalCostForaSlot / 3;
+                } else if (item instanceof Van) {
+                    totalCost = totalCostForaSlot * 2;
+                } else if (item instanceof MiniBus) {
+                    totalCost = totalCostForaSlot * 3;
+                } else if (item instanceof MiniLorry) {
+                    totalCost = totalCostForaSlot * 3;
+                }  else if (item instanceof Bus) {
+                    totalCost = totalCostForaSlot * 5;
+                } else if (item instanceof Lorry) {
+                    totalCost = totalCostForaSlot * 5;
+                }
+
                 BigDecimal vehicleCharge = new BigDecimal(totalCost);
+
                 System.out.printf("Total charge for the vehicle is LKR %.2f", vehicleCharge);
                 System.out.println("\n");
             }
         }
         if(!found) {
-            System.out.println("Models.Resources.Vehicles.Vehicle not found\n");
+            System.out.println("Vehicle not found\n");
         }
         return charges;
     }

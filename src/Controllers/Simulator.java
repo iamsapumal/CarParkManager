@@ -15,7 +15,7 @@ public class Simulator {
     static String[] carBrands = {"Toyota", "Tesla", "Hundai", "Suzuki", "Jeep", "Ferari", "Kia", "BMW"};
     static String[] busLorryBrands = {"TATA", "Layland", "Ford", "Volkswagen", "Toyata", "Daimler", "Kia", "Isuzu"};
     private static PettahMultiStoryCarParkManager pettahCarParkManager =  PettahMultiStoryCarParkManager.getInstance();
-    public static void main(String[] args) {
+    public static void simulateVehicleAddition (){
         ArrayList<Vehicle> vehicles = new ArrayList<>();
         PriorityBlockingQueue<Vehicle> carParkGateNorthGate1Queue = new PriorityBlockingQueue<>(vehicleCount,new VehicleComparator());
         PriorityBlockingQueue<Vehicle> carParkGateNorthGate2Queue = new PriorityBlockingQueue<>(vehicleCount,new VehicleComparator());
@@ -23,7 +23,7 @@ public class Simulator {
         PriorityBlockingQueue<Vehicle> carParkGateSouthGate2Queue = new PriorityBlockingQueue<>(vehicleCount,new VehicleComparator());
 
         for (int i = 0; i < vehicleCount; i++) {
-            Vehicle v = null;
+            Vehicle vehicle = null;
             int vehicleType = new Random().nextInt(1, 7);
 
             int letter1 = 65 + (int) (Math.random() * (90 - 65));
@@ -45,61 +45,52 @@ public class Simulator {
 
             Color color = new Color(r, g, b);
             int doors = new Random().nextInt(1, 5);
-            DateTime dt = new DateTime(2022, 07, 31, new Random().nextInt(0, 23), new Random().nextInt(0, 59), new Random().nextInt(0, 59));
+            DateTime dateTime = new DateTime(2022, 8, 12, new Random().nextInt(0, 23), new Random().nextInt(0, 59), new Random().nextInt(0, 59));
 
             switch (vehicleType) {
-                //car
                 case 1:
-
                     String carBrand = carBrands[new Random().nextInt(0, 7)];
-                    Vehicle car = new Car(noPlate, carBrand, "Car", dt, 1);
-                    v = car;
+                    vehicle = new Car(noPlate, carBrand, "Car", dateTime, 1);
                     break;
                 case 2:
                     String brand = carBrands[new Random().nextInt(0, 7)];
-                    Vehicle van = new Van(noPlate, brand, "Van", dt, 1500,2);
-                    v = van;
+                    vehicle = new Van(noPlate, brand, "Van", dateTime, 1500,2);
                     break;
                 case 3:
                     String bikebrand = carBrands[new Random().nextInt(0, 7)];
-                    Vehicle bike = new MotorBike(noPlate, bikebrand, "Bike", dt, "150",2);
-                    v = bike;
+                    vehicle = new MotorBike(noPlate, bikebrand, "Bike", dateTime, "150",2);
                     break;
                 case 4:
                     String busbrand = busLorryBrands[new Random().nextInt(0, 7)];
-                    Vehicle bus = new Bus(noPlate, busbrand, "Bus", dt,2);
-                    v = bus;
+                    vehicle = new Bus(noPlate, busbrand, "Bus", dateTime,2);
                     break;
                 case 5:
                     String lorryBrand = busLorryBrands[new Random().nextInt(0, 7)];
-                    Vehicle lorry = new Lorry(noPlate, lorryBrand, "Lorry", dt,  2);
-                    v = lorry;
+                    vehicle = new Lorry(noPlate, lorryBrand, "Lorry", dateTime,  2);
                     break;
                 case 6:
                     String miniLorryBrand = busLorryBrands[new Random().nextInt(0, 7)];
-                    Vehicle miniLorry = new MiniLorry(noPlate, miniLorryBrand, "Mini Lorry", dt, 2);
-                    v = miniLorry;
+                    vehicle = new MiniLorry(noPlate, miniLorryBrand, "Mini Lorry", dateTime, 2);
                     break;
                 case 7:
                     String miniBusBrand = busLorryBrands[new Random().nextInt(0, 7)];
-                    Vehicle miniBus = new MiniBus(noPlate, miniBusBrand, "Mini Bus", dt, 2);
-                    v = miniBus;
+                    vehicle = new MiniBus(noPlate, miniBusBrand, "Mini Bus", dateTime, 2);
                     break;
             }
 
             int lane = new Random().nextInt(1, 4);
             switch (lane) {
                 case 1:
-                    carParkGateNorthGate1Queue.add(v);
+                    carParkGateNorthGate1Queue.add(vehicle);
                     break;
                 case 2:
-                    carParkGateNorthGate2Queue.add(v);
+                    carParkGateNorthGate2Queue.add(vehicle);
                     break;
                 case 3:
-                    carParkGateSouthGate1Queue.add(v);
+                    carParkGateSouthGate1Queue.add(vehicle);
                     break;
                 case 4:
-                    carParkGateSouthGate2Queue.add(v);
+                    carParkGateSouthGate2Queue.add(vehicle);
                     break;
             }
 
@@ -110,7 +101,6 @@ public class Simulator {
             while (true) {
                 try {
                     Vehicle v = carParkGateNorthGate1Queue.take();
-                    //System.out.println("North 1 Polled: " + v);
                     pettahCarParkManager.addVehicle(v);
                 }
                 catch (InterruptedException e) {
@@ -127,7 +117,6 @@ public class Simulator {
             while (true) {
                 try {
                     Vehicle v = carParkGateNorthGate2Queue.take();
-                    //System.out.println("North 2 Polled: " + v);
                     pettahCarParkManager.addVehicle(v);
                 }
                 catch (InterruptedException e) {
@@ -145,7 +134,6 @@ public class Simulator {
             while (true) {
                 try {
                     Vehicle v = carParkGateSouthGate1Queue.take();
-                   // System.out.println("South 1 Polled: " + v);
                     pettahCarParkManager.addVehicle(v);
                 }
                 catch (InterruptedException e) {

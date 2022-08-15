@@ -254,7 +254,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                 }
             } **/
             int selectedFloor = searchForAvailableSlotsInAFloor(vehicle, floorNumber);
-            if (selectedFloor > 0) {
+            if (selectedFloor >= 0) {
                 if(selectedFloor > 6) {
                     pc.consume();
                 }
@@ -262,12 +262,11 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                 updateTotalAvailableCount();
                 if (!isVehicleParked) {
                     int nextPrioritizedFloor = getNextPrioritizedFloorForVehicle(vehicle, floorNumber);
-                    if (nextPrioritizedFloor > 0) {
+                    if (nextPrioritizedFloor >= 0) {
                         tryAndAddVehicleToFloor(vehicle, nextPrioritizedFloor);
                     } else  {
                         System.out.println("No space available to park " +vehicle.getBrand() +" "+vehicle.getModel()+" | "+ vehicle.getNoPlate() + " in car park");
                     }
-
                 }
             } else if (selectedFloor == -1) {
                 System.out.println("No space available to park " +vehicle.getBrand() +" "+vehicle.getModel()+" | "+ vehicle.getNoPlate() + " in car park");
@@ -291,7 +290,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         boolean foundASlotInFloor = floorManagers[floorNumber].findAvailabilityByVehicle(vehicle);
         if(!foundASlotInFloor){
             int nextAvailableFloor = getNextPrioritizedFloorForVehicle(vehicle, floorNumber);
-            if(nextAvailableFloor> 0) {
+            if(nextAvailableFloor>= 0) {
                 searchForAvailableSlotsInAFloor(vehicle, nextAvailableFloor);
             }
         } else {
@@ -324,6 +323,8 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                                 operationResult = 5;
                             } else if (floorLevel == 5) {
                                 operationResult = 6;
+                            }  else if (floorLevel == 6) {
+                                operationResult = 0;
                             } else {
                                 operationResult = -2;
                             }
@@ -338,6 +339,8 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                                 operationResult = 5;
                             } else if (floorLevel == 5) {
                                 operationResult = 6;
+                            }  else if (floorLevel == 6) {
+                                operationResult = 0;
                             } else {
                                 operationResult = -2;
                             }
@@ -370,7 +373,9 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                                 operationResult = 5;
                             } else if (floorLevel == 5) {
                                 operationResult = 6;
-                            } else {
+                            }else if (floorLevel == 0) {
+                                operationResult = 6;
+                            }  else {
                                 operationResult = -2;
                             }
                     }
@@ -391,26 +396,123 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
             if(item.getNoPlate().equals(IdPlate)) {
                 System.out.println(" Vehicles Found");
                 isVehicleFound = true;
-                if(item instanceof Van) {
+                if(item instanceof Car) {
+                    availableSlots += 1;
+                    System.out.println("Space cleared after deleting a  Car.\nAvailable Slots : "
+                            + availableSlots);
+                    if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59) {
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setParkedVehicleType("");
+                    }
+
+                } else if(item instanceof Van) {
                     availableSlots += 2;
                     System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
                             + availableSlots);
-                }    else if(item instanceof Bus) {
+                    if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59) {
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setParkedVehicleType("");
+                    }  else {
+                        System.out.println("Error occurred in clearing the vehicle space");
+                    }
+                }  else if(item instanceof Bus) {
                     availableSlots += 5;
-                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                    System.out.println("Space cleared after deleting a  Bus.\nAvailable Slots : "
                             + availableSlots);
+                    if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59 && item.getParkedSlotNumber()+2 <= 59 && item.getParkedSlotNumber()+3 <= 59 && item.getParkedSlotNumber()+4 <= 59) {
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+3].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+3].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+3].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+4].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+4].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+4].setParkedVehicleType("");
+                    }  else {
+                        System.out.println("Error occurred in clearing the vehicle space");
+                    }
                 }    else if(item instanceof Lorry) {
                     availableSlots += 5;
-                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                    System.out.println("Space cleared after deleting a  Lorry.\nAvailable Slots : "
                             + availableSlots);
+                    if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59 && item.getParkedSlotNumber()+2 <= 59 && item.getParkedSlotNumber()+3 <= 59 && item.getParkedSlotNumber()+4 <= 59) {
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+3].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+3].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+3].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+4].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+4].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+4].setParkedVehicleType("");
+                    } else {
+                        System.out.println("Error occurred in clearing the vehicle space");
+                    }
                 }    else if(item instanceof MiniLorry) {
                     availableSlots += 3;
-                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                    System.out.println("Space cleared after deleting a  MiniLorry.\nAvailable Slots : "
                             +availableSlots);
+                    if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59 && item.getParkedSlotNumber()+2 <= 59) {
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setParkedVehicleType("");
+                    }else {
+                        System.out.println("Error occurred in clearing the vehicle space");
+                    }
                 }    else if(item instanceof MiniBus) {
                     availableSlots+=3;
-                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                    System.out.println("Space cleared after deleting a  MiniBus.\nAvailable Slots : "
                             + availableSlots);
+                    if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59 && item.getParkedSlotNumber()+2 <= 59) {
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+1].setParkedVehicleType("");
+
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setOccupied(false);
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setVehiclePlateNo("");
+                        pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()+2].setParkedVehicleType("");
+                    }else {
+                        System.out.println("Error occurred in clearing the vehicle space");
+                    }
                 } else {
                     availableSlots++;
                     System.out.println("Space cleared after deleting a vehicle.\nAvailable Slots : "
@@ -677,14 +779,15 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
      */
     @Override
     public void printVehiclePercentage() {
-        int numCars=0;
-        int numBikes=0;
-        int numVans=0;
-        int numMiniLorries = 0;
-        int numMiniBuses = 0;
-        int numBuses = 0;
-        int numLorries = 0;
+        double numCars=0;
+        double numBikes=0;
+        double numVans=0;
+        double numMiniLorries = 0;
+        double numMiniBuses = 0;
+        double numBuses = 0;
+        double numLorries = 0;
 
+        double totalSize = listOfVehicles.size();
 
         for(Vehicle item:listOfVehicles) {
             if(item instanceof Car) {
@@ -704,21 +807,21 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
             }
         }
 
-        double carPercentage = (numCars/listOfVehicles.size())*100;
-        double bikePercentage = (numBikes/listOfVehicles.size())*100;
-        double vanPercentage = (numVans/listOfVehicles.size())*100;
-        double miniBusPercentage = (numMiniBuses / listOfVehicles.size()) * 100;
-        double miniLorryPercentage = (numMiniLorries / listOfVehicles.size()) * 100;
-        double busPercentage = (numBuses / listOfVehicles.size()) * 100;
-        double lorryPercentage = (numLorries / listOfVehicles.size()) * 100;
+        double carPercentage = (numCars/totalSize)*100;
+        double bikePercentage = (numBikes/totalSize)*100;
+        double vanPercentage = (numVans/totalSize)*100;
+        double miniBusPercentage = (numMiniBuses /totalSize) * 100;
+        double miniLorryPercentage = (numMiniLorries / totalSize) * 100;
+        double busPercentage = (numBuses / totalSize) * 100;
+        double lorryPercentage = (numLorries / totalSize) * 100;
 
-        System.out.println("Car Percentage is : " + carPercentage);
-        System.out.println("\nBike Percentage is : " + bikePercentage);
-        System.out.println("\n Van Percentage is : " + vanPercentage);
-        System.out.println("\nMini Bus Percentage is : " + miniBusPercentage);
-        System.out.println("\nMini Lorry Percentage is : " + miniLorryPercentage);
-        System.out.println("\nBus Percentage is :  " + busPercentage);
-        System.out.println("\nLorry Percentage is : " + lorryPercentage);
+        System.out.println("Car Percentage is : " + carPercentage + " %");
+        System.out.println("\nBike Percentage is : " + bikePercentage  + " %");
+        System.out.println("\n Van Percentage is : " + vanPercentage  + " %");
+        System.out.println("\nMini Bus Percentage is : " + miniBusPercentage  + " %");
+        System.out.println("\nMini Lorry Percentage is : " + miniLorryPercentage  + " %");
+        System.out.println("\nBus Percentage is :  " + busPercentage  + " %");
+        System.out.println("\nLorry Percentage is : " + lorryPercentage  + " %");
 
         System.out.println("\n");
     }

@@ -32,6 +32,8 @@ public class FloorManager {
                             floor.getSlotList()[i].setOccupied(true);
                             floor.getSlotList()[i].setParkedVehicleType(VehicleType.Car.name());
                             System.out.println("Car with number " + vehicle.getNoPlate() + " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex());
+                            vehicle.setParkedFloorNumber(floor.getFloorNo());
+                            vehicle.setParkedSlotNumber(floor.getSlotList()[i].getIndex());
                             slotAllocationFinished(vehicle);
                             isVehicleParked = true;
                              break;
@@ -67,8 +69,8 @@ public class FloorManager {
                             floor.getSlotList()[i+1].setVehiclePlateNo(vehicle.getNoPlate());
                             floor.getSlotList()[i+1].setOccupied(true);
                             floor.getSlotList()[i+1].setParkedVehicleType(VehicleType.Van.name());
-                            vehicle.setParkedFloorNumber(floorLevel);
-                            vehicle.setParkedSlotNumber(floorLevel);
+                            vehicle.setParkedFloorNumber(floor.getFloorNo());
+                            vehicle.setParkedSlotNumber(floor.getSlotList()[i].getIndex());
                             //   listOfVehicles.add(vehicle);
                             System.out.println("Van | number plate: " +vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
@@ -113,8 +115,8 @@ public class FloorManager {
                             floor.getSlotList()[i+4].setVehiclePlateNo(vehicle.getNoPlate());
                             floor.getSlotList()[i+4].setOccupied(true);
                             floor.getSlotList()[i+4].setParkedVehicleType(VehicleType.Bus.name());
-                            vehicle.setParkedFloorNumber(floorLevel);
-                            vehicle.setParkedSlotNumber(floorLevel);
+                            vehicle.setParkedFloorNumber(floor.getFloorNo());
+                            vehicle.setParkedSlotNumber(floor.getSlotList()[i].getIndex());
                             //   listOfVehicles.add(vehicle);
                             System.out.println("Bus | number plate: " + vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
@@ -149,8 +151,8 @@ public class FloorManager {
                             floor.getSlotList()[i+4].setOccupied(true);
                             floor.getSlotList()[i+4].setParkedVehicleType(VehicleType.Bus.name());
 
-                            vehicle.setParkedFloorNumber(floorLevel);
-                            vehicle.setParkedSlotNumber(floorLevel);
+                            vehicle.setParkedFloorNumber(floor.getFloorNo());
+                            vehicle.setParkedSlotNumber(floor.getSlotList()[i].getIndex());
                             //   listOfVehicles.add(vehicle);
                             System.out.println("Lorry | number plate: " + vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
@@ -177,8 +179,8 @@ public class FloorManager {
                             floor.getSlotList()[i+2].setVehiclePlateNo(vehicle.getNoPlate());
                             floor.getSlotList()[i+2].setOccupied(true);
                             floor.getSlotList()[i+2].setParkedVehicleType(VehicleType.Bus.name());
-                            vehicle.setParkedFloorNumber(floorLevel);
-                            vehicle.setParkedSlotNumber(floorLevel);
+                            vehicle.setParkedFloorNumber(floor.getFloorNo());
+                            vehicle.setParkedSlotNumber(floor.getSlotList()[i].getIndex());
                             //   listOfVehicles.add(vehicle);
                             System.out.println("MiniBus | number plate: " +vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
@@ -205,8 +207,8 @@ public class FloorManager {
                             floor.getSlotList()[i+2].setOccupied(true);
                             floor.getSlotList()[i+2].setParkedVehicleType(VehicleType.Bus.name());
 
-                            vehicle.setParkedFloorNumber(floorLevel);
-                            vehicle.setParkedSlotNumber(floorLevel);
+                            vehicle.setParkedFloorNumber(floor.getFloorNo());
+                            vehicle.setParkedSlotNumber(floor.getSlotList()[i].getIndex());
                             //   listOfVehicles.add(vehicle);
                             System.out.println("MiniLorry | number plate: " + vehicle.getNoPlate()+ " Parked at " + floor.getFloorNo()+ " Slot "  + floor.getSlotList()[i].getIndex() + " By " + Thread.currentThread().getName());
                             slotAllocationFinished(vehicle);
@@ -226,6 +228,8 @@ public class FloorManager {
                             floor.getSlotList()[i].setOccupied(true);
                             System.out.println("Bike | number plate: " + vehicle.getNoPlate() + " Parked at " + floor.getFloorNo() + " Slot " + floor.getSlotList()[i].getIndex());
                             slotAllocationFinished(vehicle);
+                            vehicle.setParkedFloorNumber(floor.getFloorNo());
+                            vehicle.setParkedSlotNumber(floor.getSlotList()[i].getIndex());
                             isBikeSlotFound = true;
                             isVehicleParked = true;
                             break;
@@ -240,6 +244,8 @@ public class FloorManager {
                                 System.out.println("Bike | number plate: " + vehicle.getNoPlate() + " Parked at " + floor.getFloorNo() + " Slot " + floor.getSlotList()[i].getIndex());
                                 floor.getSlotList()[i].setParkedVehicleType(VehicleType.MotorBike.name());
                                 slotAllocationFinished(vehicle);
+                                vehicle.setParkedFloorNumber(floor.getFloorNo());
+                                vehicle.setParkedSlotNumber(floor.getSlotList()[i].getIndex());
                                 isVehicleParked = true;
                                 break;
                             }

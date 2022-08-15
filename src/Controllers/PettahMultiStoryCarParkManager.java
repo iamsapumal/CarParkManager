@@ -21,7 +21,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
 
     private  static final int totalSlotsInaFloor = 60;
     private static final int floorCount = 9;
-    private int slotsForFloor = 60;
+
 
     private final int LIFT_COUNT = 4;
     private Queue<Lifts>  queue = new LinkedList<Lifts>();
@@ -219,13 +219,13 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                 }
             }
         };
-        final Lifts pc = Lifts.getInstance();
+        final Lifts liftSet = Lifts.getInstance();
         Thread t1 = new Thread(new Runnable() {
             @Override
             public void run()
             {
                 try {
-                    pc.produce();
+                    liftSet.produce();
                 }
                 catch (InterruptedException e) {
                     e.printStackTrace();
@@ -240,7 +240,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
     }
 
     public void tryAndAddVehicleToFloor(Vehicle vehicle, int floorNumber) {
-        final Lifts pc = Lifts.getInstance();
+        final Lifts liftSet = Lifts.getInstance();
         try {
             // Enable to use LIFTS with names
          /*   Integer liftNumber = 0;
@@ -256,10 +256,10 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
             int selectedFloor = searchForAvailableSlotsInAFloor(vehicle, floorNumber);
             if (selectedFloor >= 0) {
                 if(selectedFloor > 6) {
-                    pc.consume();
+                    liftSet.consume();
                 }
                 boolean isVehicleParked = setThreadPriorityAndTryToAddVehicle(vehicle, pettahMultiStoryCarPark.get(selectedFloor));
-                updateTotalAvailableCount();
+
                 if (!isVehicleParked) {
                     int nextPrioritizedFloor = getNextPrioritizedFloorForVehicle(vehicle, floorNumber);
                     if (nextPrioritizedFloor >= 0) {
@@ -267,6 +267,8 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     } else  {
                         System.out.println("No space available to park " +vehicle.getBrand() +" "+vehicle.getModel()+" | "+ vehicle.getNoPlate() + " in car park");
                     }
+                } else {
+                    updateTotalAvailableCount();
                 }
             } else if (selectedFloor == -1) {
                 System.out.println("No space available to park " +vehicle.getBrand() +" "+vehicle.getModel()+" | "+ vehicle.getNoPlate() + " in car park");

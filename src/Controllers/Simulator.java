@@ -11,7 +11,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 
 public class Simulator {
-    static int vehicleCount = 1500;
+    static int vehicleCount = 1000;
     static String[] carBrands = {"Toyota", "Tesla", "Hundai", "Suzuki", "Jeep", "Ferari", "Kia", "BMW"};
     static String[] busLorryBrands = {"TATA", "Layland", "Ford", "Volkswagen", "Toyata", "Daimler", "Kia", "Isuzu"};
     private static PettahMultiStoryCarParkManager pettahCarParkManager =  PettahMultiStoryCarParkManager.getInstance();

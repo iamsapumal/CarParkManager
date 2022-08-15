@@ -351,7 +351,6 @@ public class FloorManager {
                         }
                     }
                 }
-                //Thread.sleep(1000);
             }
         } catch (Exception ex){
          ex.printStackTrace();
@@ -359,7 +358,6 @@ public class FloorManager {
             lock.unlock();
             return isSpaceAvailable;
         }
-        //  addVehicleToFloor.start();
     }
 
 

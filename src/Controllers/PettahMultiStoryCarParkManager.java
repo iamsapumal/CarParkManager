@@ -9,12 +9,13 @@ import Util.DateTime;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PettahMultiStoryCarParkManager implements CarParkManager {
-    public static  ConcurrentLinkedQueue<Vehicle> listOfVehicles = new ConcurrentLinkedQueue();
+    public static ConcurrentLinkedDeque<Vehicle> listOfVehicles = new ConcurrentLinkedDeque();
     public static  List<Lift> LIFTS = new ArrayList<>();
     private static PettahMultiStoryCarParkManager instance = null;
 
@@ -396,11 +397,11 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         for(Vehicle item: listOfVehicles) {
             //Checking for a particular vehicle with its' plate ID
             if(item.getNoPlate().equals(IdPlate)) {
-                System.out.println(" Vehicles Found");
+                System.out.println(" Vehicles identified and removed");
                 isVehicleFound = true;
                 if(item instanceof Car) {
                     availableSlots += 1;
-                    System.out.println("Space cleared after deleting a  Car.\nAvailable Slots : "
+                    System.out.println("Space cleared after removing a  Car.\nAvailable Slots : "
                             + availableSlots);
                     if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59) {
                         pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
@@ -410,7 +411,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
 
                 } else if(item instanceof Van) {
                     availableSlots += 2;
-                    System.out.println("Space cleared after deleting a  Van.\nAvailable Slots : "
+                    System.out.println("Space cleared after removing a  Van.\nAvailable Slots : "
                             + availableSlots);
                     if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59) {
                         pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
@@ -425,7 +426,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     }
                 }  else if(item instanceof Bus) {
                     availableSlots += 5;
-                    System.out.println("Space cleared after deleting a  Bus.\nAvailable Slots : "
+                    System.out.println("Space cleared after removing a  Bus.\nAvailable Slots : "
                             + availableSlots);
                     if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59 && item.getParkedSlotNumber()+2 <= 59 && item.getParkedSlotNumber()+3 <= 59 && item.getParkedSlotNumber()+4 <= 59) {
                         pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
@@ -452,7 +453,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     }
                 }    else if(item instanceof Lorry) {
                     availableSlots += 5;
-                    System.out.println("Space cleared after deleting a  Lorry.\nAvailable Slots : "
+                    System.out.println("Space cleared after removing a  Lorry.\nAvailable Slots : "
                             + availableSlots);
                     if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59 && item.getParkedSlotNumber()+2 <= 59 && item.getParkedSlotNumber()+3 <= 59 && item.getParkedSlotNumber()+4 <= 59) {
                         pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
@@ -479,7 +480,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     }
                 }    else if(item instanceof MiniLorry) {
                     availableSlots += 3;
-                    System.out.println("Space cleared after deleting a  MiniLorry.\nAvailable Slots : "
+                    System.out.println("Space cleared after removing a  MiniLorry.\nAvailable Slots : "
                             +availableSlots);
                     if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59 && item.getParkedSlotNumber()+2 <= 59) {
                         pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
@@ -498,7 +499,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     }
                 }    else if(item instanceof MiniBus) {
                     availableSlots+=3;
-                    System.out.println("Space cleared after deleting a  MiniBus.\nAvailable Slots : "
+                    System.out.println("Space cleared after removing a  MiniBus.\nAvailable Slots : "
                             + availableSlots);
                     if(item.getParkedFloorNumber() >= 0 && item.getParkedFloorNumber() <= 8 && item.getParkedSlotNumber() >=0 && item.getParkedSlotNumber() <= 59 && item.getParkedSlotNumber()+1 <= 59 && item.getParkedSlotNumber()+2 <= 59) {
                         pettahMultiStoryCarPark.get(item.getParkedFloorNumber()).getSlotList()[item.getParkedSlotNumber()].setOccupied(false);
@@ -517,7 +518,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     }
                 } else {
                     availableSlots++;
-                    System.out.println("Space cleared after deleting a vehicle.\nAvailable Slots : "
+                    System.out.println("Space cleared after removing a vehicle.\nAvailable Slots : "
                             + availableSlots);
                 }
             }
@@ -648,13 +649,24 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         for( Vehicle item:listOfVehicles) {
             if(item instanceof Van) {
                 System.out.println(" Vehicle Type is a  Van");
+            }else if(item instanceof Car) {
+                System.out.println(" Vehicle Type is a  Car");
+            }else if(item instanceof MiniBus) {
+                System.out.println(" Vehicle Type is a  MiniBus");
+            }else if(item instanceof MiniLorry) {
+                System.out.println(" Vehicle Type is a  MiniLorry");
+            }else if(item instanceof Bus) {
+                System.out.println(" Vehicle Type is a  Bus");
+            }else if(item instanceof Lorry) {
+                System.out.println(" Vehicle Type is a  Lorry");
             }else if(item instanceof MotorBike) {
                 System.out.println(" Vehicle Type is a  MotorBike");
             }else {
-                System.out.println(" Vehicle Type is a  Car.");
+                System.out.println(" Vehicle Type is a  another.");
             }
             System.out.println("******************");
             System.out.println("ID Plate : "+item.getNoPlate());
+            System.out.println("Parked in slot : "+item.getParkedFloorNumber()+ " in floor : " + item.getParkedSlotNumber());
             System.out.println("Entry Time : "
                     +item.getEntryDate().getHours()+":"+item.getEntryDate().getMinutes()
                     +":"+item.getEntryDate().getSeconds()+"-"+item.getEntryDate().getDate()
@@ -672,7 +684,7 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         //  Collections.sort(listOfVehicles);
         System.out.println("The longest parked vehicle is : ");
         System.out.println("................................................");
-        System.out.println("ID Plate : "+listOfVehicles.peek().getNoPlate());
+        System.out.println("ID Plate : "+ (listOfVehicles.peek() != null ? listOfVehicles.peek().getNoPlate() : "Not found"));
 
         if(listOfVehicles.peek() instanceof Car) {
             System.out.println(" Vehicle Type is a  Car.");
@@ -710,20 +722,20 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         // Collections.sort(listOfVehicles, Collections.reverseOrder());
         System.out.println("The latest parked vehicle is : ");
         System.out.println("..............................................");
-        System.out.println("ID Plate : "+listOfVehicles.peek().getNoPlate());
-        if(listOfVehicles.peek() instanceof Car) {
+        System.out.println("ID Plate : "+listOfVehicles.getLast().getNoPlate());
+        if(listOfVehicles.getLast() instanceof Car) {
             System.out.println(" Vehicle Type is a  Car.");
-        } else if(listOfVehicles.peek() instanceof MotorBike) {
+        } else if(listOfVehicles.getLast() instanceof MotorBike) {
             System.out.println(" Vehicle Type is a  MotorBike.");
-        }else if(listOfVehicles.peek() instanceof Van){
+        }else if(listOfVehicles.getLast() instanceof Van){
             System.out.println(" Vehicle Type is a  Van.");
-        } else if(listOfVehicles.peek() instanceof MiniBus) {
+        } else if(listOfVehicles.getLast() instanceof MiniBus) {
             System.out.println(" Vehicle Type is a  MiniBus.");
-        } else if(listOfVehicles.peek() instanceof MiniLorry) {
+        } else if(listOfVehicles.getLast() instanceof MiniLorry) {
             System.out.println(" Vehicle Type is a  MiniLorry.");
-        } else if(listOfVehicles.peek() instanceof Bus) {
+        } else if(listOfVehicles.getLast() instanceof Bus) {
             System.out.println(" Vehicle Type is a  Bus.");
-        } else if(listOfVehicles.peek() instanceof Lorry) {
+        } else if(listOfVehicles.getLast() instanceof Lorry) {
             System.out.println(" Vehicle Type is a  Lorry.");
         } else {
             System.out.println(" Vehicle Type Unidentified.");
@@ -807,13 +819,20 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
             }
         }
 
-        double carPercentage = (numCars/totalSize)*100;
-        double bikePercentage = (numBikes/totalSize)*100;
-        double vanPercentage = (numVans/totalSize)*100;
-        double miniBusPercentage = (numMiniBuses /totalSize) * 100;
-        double miniLorryPercentage = (numMiniLorries / totalSize) * 100;
-        double busPercentage = (numBuses / totalSize) * 100;
-        double lorryPercentage = (numLorries / totalSize) * 100;
+        double carPercentageFull = (numCars/totalSize)*100;
+        double carPercentage = Math.round(carPercentageFull * 100.0) / 100.0;
+        double bikePercentageFull = (numBikes/totalSize)*100;
+        double bikePercentage = Math.round(bikePercentageFull * 100.0) / 100.0;
+        double vanPercentageFull = (numVans/totalSize)*100;
+        double vanPercentage = Math.round(vanPercentageFull * 100.0) / 100.0;
+        double miniBusPercentageFull = (numMiniBuses /totalSize)*100;
+        double miniBusPercentage = Math.round(miniBusPercentageFull * 100.0) / 100.0;
+        double miniLorryPercentageFull = (numMiniLorries / totalSize)*100;
+        double miniLorryPercentage = Math.round(miniLorryPercentageFull * 100.0) / 100.0;
+        double busPercentageFull = (numBuses / totalSize)*100;
+        double busPercentage = Math.round(busPercentageFull * 100.0) / 100.0;
+        double lorryPercentageFull = (numLorries / totalSize)*100;
+        double lorryPercentage = Math.round(lorryPercentageFull * 100.0) / 100.0;
 
         System.out.println("Car Percentage is : " + carPercentage + " %");
         System.out.println("\nBike Percentage is : " + bikePercentage  + " %");

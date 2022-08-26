@@ -69,17 +69,14 @@ class Main {
     private static void parkedByDay() {
         //getting Date from the user
         Scanner sc=new Scanner(System.in);
-        System.out.println("Enter a Date to Find (DD/MM/YYYY-HH:mm:ss) : ");
-        String checkThisTime=sc.next();
-        String[] date =checkThisTime.split("-");
-        String[] dateString= date[0].split("/");
-        String[] timeString=date[1].split(":");
-        DateTime givenDate=new DateTime(Integer.parseInt(dateString[0]),
+        System.out.println("Enter a Date to Find (DD/MM/YYYY) : ");
+        String checkThisTime = sc.next();
+        String givenDateString = checkThisTime.split("-")[0];
+        String[] dateString = givenDateString.split("/");
+        DateTime givenDate=new DateTime(Integer.parseInt(dateString[2]),
                 Integer.parseInt(dateString[1]),
-                Integer.parseInt(dateString[2]),
-                Integer.parseInt(timeString[0]),
-                Integer.parseInt(timeString[1]),
-                Integer.parseInt(timeString[2]));
+                Integer.parseInt(dateString[0]),
+0,0,0);
         pettahCarParkManager.printVehicleByDay(givenDate);
     }
 

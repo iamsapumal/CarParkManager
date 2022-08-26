@@ -97,7 +97,7 @@ public class Simulator {
         }
 
         Thread thread1 = new Thread(() -> {
-            System.out.println("Polling...");
+         //   System.out.println("Polling...");
             while (true) {
                 try {
                     Vehicle v = carParkGateNorthGate1Queue.take();
@@ -109,11 +109,11 @@ public class Simulator {
             }
         });
 
-        thread1.setPriority(10);
+        thread1.setPriority(Thread.MAX_PRIORITY);
         thread1.start();
 
         Thread thread2 = new Thread(() -> {
-            System.out.println("Polling...");
+          //  System.out.println("Polling...");
             while (true) {
                 try {
                     Vehicle v = carParkGateNorthGate2Queue.take();
@@ -125,7 +125,7 @@ public class Simulator {
             }
         });
 
-        thread2.setPriority(10);
+        thread2.setPriority(Thread.MAX_PRIORITY);
         thread2.start();
 
 
@@ -143,7 +143,7 @@ public class Simulator {
         });
 
 
-        thread3.setPriority(5);
+        thread3.setPriority(Thread.NORM_PRIORITY);
         thread3.start();
 
 
@@ -161,7 +161,7 @@ public class Simulator {
             }
         });
 
-        thread4.setPriority(5);
+        thread4.setPriority(Thread.NORM_PRIORITY);
         thread4.start();
 
     }

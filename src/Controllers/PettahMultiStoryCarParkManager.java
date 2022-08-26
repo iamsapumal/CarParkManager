@@ -747,12 +747,12 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     givenDate.getMonth()==item.getEntryDate().getMonth() &&
                     givenDate.getDate() == item.getEntryDate().getDate()) {
 
-                System.out.println("ID Plate : "+item.getNoPlate());
+                System.out.println("ID Plate : "+ item.getNoPlate());
 
                 System.out.println("Parked Date and Time : "+item.getEntryDate().getDate()+"/"+
-                        item.getEntryDate().getMonth()+"/"+item.getEntryDate().getHours()+"-"
+                        item.getEntryDate().getMonth()+"/"+item.getEntryDate().getYear()+"-"
                         +item.getEntryDate().getHours()+":"+item.getEntryDate().getMinutes()
-                        +":"+item.getEntryDate().getYear());
+                        +":"+item.getEntryDate().getSeconds());
                 if (item instanceof MotorBike) {
                     System.out.println("Vehicle Type is a MotorBike.");
                 } else if (item instanceof Lorry) {
@@ -765,8 +765,6 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
                     System.out.println("Vehicle Type is a MiniLorry.");
                 } else if(item instanceof Van) {
                     System.out.println(" Vehicle Type is a  Van");
-                }else if(item instanceof MotorBike) {
-                    System.out.println(" Vehicle Type is a Motor Bike.");
                 }else {
                     System.out.println(" Vehicle Type is a  Car.");
                 }
@@ -832,10 +830,9 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
      * calculateChargers
      * @param plateID
      * @param currentTime
-     * @return
      */
     @Override
-    public BigDecimal calculateChargers(String plateID, DateTime currentTime) {
+    public void calculateChargers(String plateID, DateTime currentTime) {
         boolean found = false;
         BigDecimal charges = null;
         for(Vehicle item:listOfVehicles) {
@@ -898,6 +895,5 @@ public class PettahMultiStoryCarParkManager implements CarParkManager {
         if(!found) {
             System.out.println("Vehicle not found\n");
         }
-        return charges;
     }
 }
